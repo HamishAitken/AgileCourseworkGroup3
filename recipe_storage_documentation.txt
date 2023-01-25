@@ -1,0 +1,41 @@
+Currently the recipes are stored in a JSON file, with all of the recipes being there.
+The "image" property is a URL to the thumbnail of a recipe.
+The "ingredients" property is an array of arrays of ingredient objects, which are a full ingredient description for the recipe (such as "1 clove of garlic") and the ingredient ID (from ingredients.json).
+The "preparation_steps" is a Markdown description of the cooking steps
+
+Recipe { 
+	id: INT;
+	name: string;
+	image: string;
+	ingredients: [{string, INT}]; 
+	preparation_steps: string; 
+}
+
+The file looks like this:
+
+{
+	"data": {
+		recipes: [Recipe]
+	}
+}
+
+In the future this will probably be changed either to doing the search on the server using a database, which will be more scalable and maintainable, as well as will allow editing the recipes.
+ 
+
+To store ingredients another JSON file has been created. The file contains a JSON object that has an array of Ingredient objects. Each ingredient is represented by an object that has an "id" field (an integer), a "name" field (a string), an "image" field (a string), and a "store_link" field (a string). As shown below.
+It is very similar to the recipe file
+
+Ingredient {
+"id": int,
+"name": "string",
+"image": "string",
+"store_link": "string"
+}
+
+And the file is:
+
+{
+	"data": {
+		ingredients: [Ingredient]
+	}
+}
