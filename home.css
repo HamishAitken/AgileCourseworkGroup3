@@ -1,3 +1,4 @@
+@font-face {
     font-family: "intro-inline";
     src: url("resources/intro/Intro_Inline.otf");
 }
@@ -21,6 +22,25 @@ body{
 .icon-hover:hover{
     fill: #655F58;
 }
+
+.element-flex{
+  border-radius: 7px;
+  background-color: #B6AEAE;
+  padding: 7px;
+  height: fit-content;
+  color: #655F58;
+  margin-right: 5px;
+}
+
+.element-flex:hover{
+  background-color: #329E62;
+  color: white;
+}
+
+.element-flex:focus{
+  background-color: #329E62;
+}
+
 
 
 .navbar-custom{
@@ -62,11 +82,11 @@ body{
 }
 
 .border-right{
-  border-right: 2px solid black;
+  border-right: 1px solid #655F58;
 }
 
 .border-left{
-  border-left: 2px solid black;
+  border-left: 2px solid #655F58;
 }
 
 
