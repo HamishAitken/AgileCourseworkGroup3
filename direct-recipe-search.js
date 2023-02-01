@@ -1,12 +1,10 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-    const searchInput = document.getElementById("formRecipe");
+const searchInput = document.querySelector("#formRecipe");
 
-    searchInput.addEventListener("keydown", function(event) {
+searchInput.addEventListener("keydown", function(event) {
         if (event.key == "Enter") {
             directRecipeSearch();
-        }
-    });
-})
+    }
+});
 
 
 
