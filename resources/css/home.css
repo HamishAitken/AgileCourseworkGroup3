@@ -1,6 +1,6 @@
 @font-face {
     font-family: "intro-inline";
-    src: url("resources/intro/Intro_Inline.otf");
+    src: url("../intro/Intro_Inline.otf");
 }
 
 .intro-inline {
