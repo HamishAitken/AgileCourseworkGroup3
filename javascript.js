@@ -17,6 +17,10 @@ async function getRecipes() {
   // TODO: handle not finding any recipes (show a message?)
   const collectedRecipes = recData.data.recipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === ingID))
 
+  if (collectedRecipes.length == 0 ) {
+    recipeContainer.innerHTML = "<p> No recipes match ingredients</p>"
+  } 
+
   const recipeContainer = document.getElementById('recipeList')
   recipeContainer.innerHTML = ''
 
