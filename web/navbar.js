@@ -1,7 +1,7 @@
-const navigationbar=()=>{
+const navigationbar = () => {
   const navbar = document.createElement('nav')
-  let innerHTML='';
-    innerHTML = `<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-dark ">
+  let innerHTML = ''
+  innerHTML = `<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-dark ">
     <div class="container-fluid ">
         <a class="navbar-brand" href="/admin">
             <img src="https://cdn.shopify.com/s/files/1/0397/3749/1613/files/littleGreenLogo_360x.jpg?v=1613552940" alt="littleGreenLogo_360x" width="80px" height="50px" class="rounded">
@@ -22,8 +22,7 @@ const navigationbar=()=>{
         </ul>
       </div>
     </div>
-  </nav>`;
-  navbar.innerHTML = innerHTML;
-    return navbar;
-
+  </nav>`
+  navbar.innerHTML = innerHTML
+  return navbar
 }

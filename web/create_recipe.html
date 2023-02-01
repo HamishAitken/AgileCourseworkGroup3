@@ -1,122 +1,108 @@
 <!DOCTYPE html>
-<html   lang = "en" > 
-   <head> 
-     <meta   charset = "utf-8"> 
-     <title>navigationbar</title >
-<script src="/navbar.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>navigationbar</title>
+    <script src="/navbar.js"></script>
 
-        <!--bootstrap css cdn-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <style>
-            hr {
-              border: 2px solid #000;
-              background-color: #000;
-              height: 4px;
-            }
+    <!--bootstrap css cdn-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <style>
+      hr {
+        border: 2px solid #000;
+        background-color: #000;
+        height: 4px;
+      }
 
-            .nav-link:hover{
-              background: #0f870f;
-   
-                border-radius: 10px;
-            }
-           </style>
-   
-    </head > 
-   <body class="bg-success"> 
-  <div id="navbar-container" >
+      .nav-link:hover {
+        background: #0f870f;
 
-
-  </div>
-  <script>
-    const navbar=document.getElementById("navbar-container");
-    navbar.appendChild(navigationbar())
-    
-  </script>
-<div class="container text-white">
-    <div>
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="bg-success">
+    <div id="navbar-container"></div>
+    <script>
+      const navbar = document.getElementById('navbar-container')
+      navbar.appendChild(navigationbar())
+    </script>
+    <div class="container text-white">
+      <div>
         <h3 class="text-center">Recipe Details</h3>
-       
-    </div>
-    <div class=" border-5 rounded-5">
+      </div>
+      <div class="border-5 rounded-5">
         <form>
-            <!-- Name input -->
-            <div class="col-auto">
-                <label class="form-label" >recipe name:</label>
-              <input type="text" id="recipe-name" class="form-control " />
-             
-            </div>
-            <div class="col-auto">
-                <label class="form-label" >recipe image url:</label>
-                <input type="text" id="image" class="form-control" />
-                
-              </div>
-            <!-- Message input -->
-            <div class="col-auto">
-                <label class="form-label" for="ingredients">Ingredients required:</label>
-                <textarea class="form-control" id="ingredients" rows="5"></textarea>
-                
-              </div>
-           
-  
-            <!-- Message input -->
-            <div class="fcol-auto">
-                <label class="form-label" >Preparation instructions:</label>
-              <textarea class="form-control" id="instructions" rows="10"></textarea>
-             
-            </div>
-  
-           
-  
-            <!-- Submit button -->
-            <div class="d-flex justify-content-center">
-            <button id="submit" type="button" class="btn btn-primary btn-block mb-4 mt-3">save recipe</button>
-        </div>
-          </form>
+          <!-- Name input -->
+          <div class="col-auto">
+            <label class="form-label">recipe name:</label>
+            <input type="text" id="recipe-name" class="form-control" />
+          </div>
+          <div class="col-auto">
+            <label class="form-label">recipe image url:</label>
+            <input type="text" id="image" class="form-control" />
+          </div>
+          <!-- Message input -->
+          <div class="col-auto">
+            <label class="form-label" for="ingredients">Ingredients required:</label>
+            <textarea class="form-control" id="ingredients" rows="5"></textarea>
+          </div>
 
+          <!-- Message input -->
+          <div class="fcol-auto">
+            <label class="form-label">Preparation instructions:</label>
+            <textarea class="form-control" id="instructions" rows="10"></textarea>
+          </div>
+
+          <!-- Submit button -->
+          <div class="d-flex justify-content-center">
+            <button id="submit" type="button" class="btn btn-primary btn-block mb-4 mt-3">save recipe</button>
+          </div>
+        </form>
+      </div>
     </div>
 
+    <script>
+      document.getElementById('submit')
+      submit.addEventListener('click', function () {
+        const recipe_name = document.getElementById('recipe-name').value
+        const url = document.getElementById('image').value
+        const ingredients = document.getElementById('ingredients').value
+        const instructions = document.getElementById('instructions').value
 
-</div>
+        const recipe = {
+          recipe: recipe_name,
+          image: url,
+          ingredients: ingredients,
+          instructions: instructions,
+        }
 
-<script>
-
-document.getElementById("submit");
-submit.addEventListener("click", function(){
-    const recipe_name=document.getElementById("recipe-name").value;
-    const url=document.getElementById("image").value;
-    const ingredients=document.getElementById("ingredients").value;
-    const instructions=document.getElementById("instructions").value;
-
-    const recipe={
-        recipe:recipe_name,
-        image:url,
-        ingredients:ingredients,
-        instructions:instructions
-    }
-
-    fetch('/submit_recipe',{
-        method:'POST',
-        headers:{
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-          recipe
+        fetch('/submit_recipe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            recipe,
+          }),
         })
-    }).then(res=>res.json())
-    .then(response=>{
-      console.log(response)
-    });
+          .then((res) => res.json())
+          .then((response) => {
+            console.log(response)
+          })
+      })
+    </script>
 
-  });
-
-
-
-</script>
-
-
-
-      <!--bootstrap javascript cdn-->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-
-   </body>
-    </html>
+    <!--bootstrap javascript cdn-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

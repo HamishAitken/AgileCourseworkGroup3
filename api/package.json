@@ -1,26 +1,23 @@
 {
-  "name": "agilecourseworkgroup3",
+  "name": "lgl-backend",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon main.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js",
+    "watch": "nodemon main.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/HamishAitken/AgileCourseworkGroup3.git"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/HamishAitken/AgileCourseworkGroup3/issues"
-  },
-  "homepage": "https://github.com/HamishAitken/AgileCourseworkGroup3#readme",
   "dependencies": {
-    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "minimongo": "^6.12.6",
+    "helmet": "^6.0.1",
+    "lokijs": "^1.5.12",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.20"
   }
 }

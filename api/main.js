@@ -1,59 +1,39 @@
-const fs = require('fs');
-const http = require('http');
-const path = require('path');
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require('express')
+const cors = require('cors')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const adminRouter = require('./routes/admin.js')
 
-const app = express();
-app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'login.html'));
+const PORT = 3000
+console.log('Starting the server...')
 
-});
+const app = express()
 
+app.use(cors())
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: ["'self'", "'unsafe-inline'", 'https:'],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
+    crossOriginEmbedderPolicy: { policy: 'credentialless' },
+  })
+)
+app.use(
+  morgan(':remote-addr - :remote-user [:date[iso]] :method :url :status (:response-time ms) - :res[content-length]')
+)
+app.use(express.json())
 
-app.use(bodyParser.urlencoded());
-app.use(bodyParser.json());
-app.post('/login',(req,res) => {
-  const username=req.body.login.username;
-  const password=req.body.login.password;
+app.get('/api', (req, res) => {
+  res.send('LGL api. Hello there!')
+})
 
-  if(username==="admin"&&password==="test123"){
-    res.send(JSON.stringify({success:true}));
-    res.sendStatus(200);
+app.use('/api/admin', adminRouter)
 
+app.use(express.static('../web'))
 
-  }
-  else{
-    res.send(JSON.stringify({success:false}));
-    res.sendStatus(401);
-  }
-});
-
-app.post('/search',(req,res) => {
- const search=req.body.search;
-
-});
-
-app.post('/submit_recipe',(req,res) => {
-const recipe=req.body.recipe;
-const ingredients=recipe.ingredients;
-console.log(ingredients);
-  
-});
-
-app.get('/create_recipe',(req,res) => {
-    res.sendFile(path.join(__dirname,'create_recipe.html'));
-});
-
-app.get('/admin',(req,res) => {
-  res.sendFile(path.join(__dirname,'admin.html'));
-});
-
-app.get('/navbar.js',(req,res) => {
-  res.sendFile(path.join(__dirname,'navbar.js'));
-});
-
-const port=1000;
-app.listen(port, () => {
-  console.log('Server listening on port${}'+port);
-});
+app.listen(PORT, () => {
+  console.log('Listening on port:', PORT)
+})
