@@ -1,5 +1,8 @@
 async function getRecipes() {
   let searchTerm = document.getElementById('formIngredients').value
+  const recipeContainer = document.getElementById('recipeList')
+
+  recipeContainer.innerHTML = " "
 
   //read json file and parse
   // TODO: handle missing file
@@ -17,11 +20,13 @@ async function getRecipes() {
   // TODO: handle not finding any recipes (show a message?)
   const collectedRecipes = recData.data.recipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === ingID))
 
+  
+
   if (collectedRecipes.length == 0 ) {
     recipeContainer.innerHTML = "<p> No recipes match ingredients</p>"
   } 
   else{
-    const recipeContainer = document.getElementById('recipeList')
+    
     recipeContainer.innerHTML = ''
   
     collectedRecipes.forEach((recipe) => {
