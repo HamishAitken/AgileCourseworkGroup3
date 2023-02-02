@@ -137,10 +137,13 @@ async function getInitialRecipes() {
 
 
 async function getRecipes() {
-    let searchTerm = document.getElementById('formIngredients').value
     const recipeContainer = document.getElementById('recipesCard')
-  
     recipeContainer.innerHTML = " "
+
+    let searchTerm = document.getElementById('formIngredients').value
+    
+  
+    
   
     //read json file and parse
     // TODO: handle missing file

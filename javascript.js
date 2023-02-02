@@ -8,7 +8,7 @@ async function getRecipes() {
   // TODO: handle missing file
   const ingData = await fetch('ingredients.json').then((res) => res.json())
 
-  const searchResults = ingData.data.ingredients.filter((ingredient) => ingredient.name.indexOf(searchTerm))
+  const searchResults = ingData.data.ingredients.filter((ingredient) => ingredient.name.includes(searchTerm))
 
   // TODO: handle missing file
   const recData = await fetch('recipes.json').then((res) => res.json())
