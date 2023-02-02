@@ -190,10 +190,11 @@ async function getRecipes() {
       
     // TODO: dropdown to allow user to select the ingredient (instead of using the first one)
     // TODO: handle not finding any ingredients
-    let collectedRecipes = recData.data.recipes
-    for (let result of searchResults) {
-        collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
-    }
+    let collectedRecipes = recData.data.recipes.filter(recipe => {
+        return searchResults.every(ingredient => {
+            return recipe.ingredients.some(ing => ing.id === ingredient.id);
+        });
+    });
       
     // TODO: handle not finding any recipes (show a message?)
       
