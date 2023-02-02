@@ -137,35 +137,71 @@ async function getInitialRecipes() {
 
 
 async function getRecipes() {
+    // const recipeContainer = document.getElementById('recipesCard')
+    // recipeContainer.innerHTML = " "
+
+    // let searchTerm = document.getElementById('formIngredients').value
+    
+  
+    
+  
+    // //read json file and parse
+    // // TODO: handle missing file
+    // const ingData = await fetch('ingredients.json').then((res) => res.json())
+  
+    // const searchResults = ingData.data.ingredients.filter((ingredient) => ingredient.name === searchTerm)
+  
+    // // TODO: handle missing file
+    // const recData = await fetch('recipes.json').then((res) => res.json())
+  
+    // // TODO: dropdown to allow user to select the ingredient (instead of using the first one)
+    // // TODO: handle not finding any ingredients
+    // const ingID = searchResults[0].id
+  
+    // // TODO: handle not finding any recipes (show a message?)
+    // const collectedRecipes = recData.data.recipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === ingID))
+  
+    
+  
+    // const recipeNames = collectedRecipes.map(recipe => recipe.name)
+    // generateRecipes(recipeNames)
+  
+    
     const recipeContainer = document.getElementById('recipesCard')
     recipeContainer.innerHTML = " "
-
-    let searchTerm = document.getElementById('formIngredients').value
     
-  
-    
-  
+    let searchTerms = document.getElementById('formIngredients').value.split(',')
+        
+      
+        
+      
     //read json file and parse
     // TODO: handle missing file
     const ingData = await fetch('ingredients.json').then((res) => res.json())
-  
-    const searchResults = ingData.data.ingredients.filter((ingredient) => ingredient.name === searchTerm)
-  
+      
+    // Filter the ingredients data to only contain the ones that match the search terms
+    let searchResults = ingData.data.ingredients
+    for (let term of searchTerms) {
+        searchResults = searchResults.filter((ingredient) => ingredient.name === term.trim())
+    }
+      
     // TODO: handle missing file
     const recData = await fetch('recipes.json').then((res) => res.json())
-  
+      
     // TODO: dropdown to allow user to select the ingredient (instead of using the first one)
     // TODO: handle not finding any ingredients
-    const ingID = searchResults[0].id
-  
+    let collectedRecipes = recData.data.recipes
+    for (let result of searchResults) {
+        collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
+    }
+      
     // TODO: handle not finding any recipes (show a message?)
-    const collectedRecipes = recData.data.recipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === ingID))
-  
-    
-  
+      
     const recipeNames = collectedRecipes.map(recipe => recipe.name)
     generateRecipes(recipeNames)
-  
-   
+      
+       
+    
+    
   }
   
