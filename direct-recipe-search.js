@@ -1,3 +1,4 @@
+const searchInput = document.getElementById("formRecipe");
 searchInput.addEventListener("keydown", function(event) {
         if (event.key == "Enter") {
             directRecipeSearch();
