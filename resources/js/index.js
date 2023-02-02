@@ -132,7 +132,7 @@ async function getInitialRecipes() {
     const recData = await fetch('recipes.json').then((res) => res.json())
     const collectedRecipes = recData.data.recipes.slice()
     const recipeNames = collectedRecipes.map(recipe => recipe.name)
-    return recipeNamese,onions
+    return recipeNames
 }
 
 
