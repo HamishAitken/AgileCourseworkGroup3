@@ -68,6 +68,11 @@
     </div>
 
     <script>
+      const token = JSON.parse(localStorage.getItem('token'))
+      if (!token) {
+        window.location.href = '/login.html'
+      }
+
       document.getElementById('submit')
       submit.addEventListener('click', function () {
         const recipe_name = document.getElementById('recipe-name').value
@@ -82,18 +87,33 @@
           instructions: instructions,
         }
 
-        fetch('/submit_recipe', {
+        fetch('/api/admin/create_recipe', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             recipe,
+            token,
           }),
         })
-          .then((res) => res.json())
-          .then((response) => {
-            console.log(response)
+          .then((res) => {
+            const status_code = res.status
+
+            return res.json().then((response) => ({ status_code, response }))
+          })
+
+          .then((status_code, response) => {
+            const status = status_code.status_code
+            const token = status_code.response
+
+            if (status === 200) {
+              alert('recipe created successfully')
+              window.location.href = '/admin.html'
+            } else {
+              alert('invalid credentials')
+              window.location.href = '/login.html'
+            }
           })
       })
     </script>

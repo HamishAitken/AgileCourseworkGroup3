@@ -55,8 +55,6 @@ body{
   background-color: #329E62;
 }
 
-
-
 .navbar-custom{
   height: 135px;
   background-color: white;
@@ -106,7 +104,6 @@ body{
   height: 100vh;
 }
 
-
 @media (max-width:575px) { 
   .border-right{
     border: none;
@@ -126,3 +123,14 @@ body{
     margin-top: 40px;
   }
  }
+
+ a {
+  text-decoration: none;
+  color: initial;
+  font-style: normal;
+  font-weight: normal;
+  font-size: initial;
+  font-family: initial;
+  background-color: initial;
+  border: none;
+}

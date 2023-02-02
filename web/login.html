@@ -20,7 +20,7 @@
               <div class="row g-0">
                 <div class="col-md-6 col-lg-5 d-none d-md-block" style="height: 550px; overflow: hidden">
                   <img
-                    src="https://lh3.googleusercontent.com/d9ONlQGznu6jP7RrW-CXFEDBxQNtUKa_ZhVb5Vj9m2E5r5Em2qubor6BDh3wxEoNpNxfOSlRIB8B-dH_wylFTS14l1gHuJB94MSY3rOqhZySKd1Td_Rar6N61DwUoDceSzpl-EHnYy1SPEHRH9nyEhza2pfrKH_-S11Q5ZU3JhLScAr-Y_Zuhr-YGvnTWc-fpBQclr-u41ziOryWjp_7Y0wPqsQsOMIeN5C5kive774aPF5IS7vWZpJOtnDCI2116hjt-7eVw6W1eGS8ZBbkCOHcbvGCAh4rQ56iHLIlMa7l9OTlkb97GRpYqp1Tdcpm_6kd023XGWNxdQRg-Euk5BlVgLMBs2sOC1DEst1Kt3rV2z2-sfmdJPw901BNhtmVWrPuI2lVIuVLa3scMcJ248cytt0YUwOlyi9qaqVGitUacM6ljAFNoLhQuOjR0ma8XInR1dBWApDUcDaXAF2iTHMAHovbd5m4BzAcekS30cmJEmnlq5PnuRYbuvj4slD_QJkvSMEboKETIvtxs1jCjed2PxSoo2z_d_a4ddxHCuTgDSqRhJBLl-a67haB9rZrGBRhNIY5dWhQzE0SH2k1YbBerOA0x-XzRQMrCNv5d0p-FdfgP_YBl0e-wxFLpxKucb8b_VQ4U0CfnbjwzLB4lVMZR368m5On5USfJaLVxfx9RC6jbIdZn1SeOfFFeR_SURv6VHCJ4RAkRCfvF3on4h-4vWxb1PqABGM0oWldKzT9q4ZDaq9j0kdct0s90JeNeidqhBLtnQiFerhCdqS1i7TQavzfVWz209-96_1zU62LI912lc2Q45cEDSeROkOMTUha6WI61j09tHT9qVDM1nbwKmILqSP2WDxuFS43mtxCbvwaxj9zL38RH8GVVx5SXVRn4KiFOQdPMbqhcORcXG7CqKCzBi9ArkZR26UznzpNhDx8-IDg2MRp-vLdbCCz0-gCJQSiMtFtVYU7tXDI=w1112-h1390-no?authuser=0"
+                    src="/assets/TLGL3.jpg"
                     alt="login form"
                     class="img-fluid"
                     style="border-radius: 1rem 0 0 1rem; height: inherit"
@@ -75,7 +75,7 @@
           password: password,
         }
 
-        fetch('/login', {
+        fetch('/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -84,14 +84,48 @@
             login,
           }),
         })
-          .then((res) => res.json())
-          .then((response) => {
-            const success = response.success
+          .then((res) => {
+            const status_code = res.status
 
-            if (success === true) {
-              window.location.href = '/admin'
-            } else {
-              alert('wrong username or password')
+            return res.json().then((response) => ({ status_code, response }))
+          })
+
+          .then((status_code, response) => {
+            const status = status_code.status_code
+            const token = status_code.response
+
+            if (status === 200) {
+              localStorage.setItem('token', JSON.stringify(token))
+              window.location = '/admin.html'
+            } else if (status === 401) {
+              window.localStorage = null
+              const modal = document.createElement('div')
+              modal.innerHTML = `
+            <div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog " role="document">
+                <div class="modal-content bg-danger rounded-5 border-5">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Error</h5>
+                    <button id="close"class="btn btn-primary"><svg class="text-white"xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg></button>
+                  </div>
+                  <div class="modal-body">
+                    <p class="text-white">Invalid login/password</p>
+                  </div>
+                </div>
+              </div>
+            </div>`
+              document.body.appendChild(modal)
+              const myModal = document.querySelector('#myModal')
+              myModal.classList.add('show')
+              myModal.style.display = 'block'
+
+              document.getElementById('close').addEventListener('click', function (event) {
+                myModal.classList.remove('show')
+                myModal.style.display = 'none'
+              })
             }
           })
       })
