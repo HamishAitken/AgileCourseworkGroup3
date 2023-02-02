@@ -90,7 +90,7 @@ function generateRecipes(recipesInput){
 
 
 
-let initialRecipes = getInitialRecipes()
+//let initialRecipes = getInitialRecipes()
 
 //generateRecipes(initialRecipes);
 generateIngredients();
