@@ -92,7 +92,7 @@ function generateRecipes(recipesInput){
 
 let initialRecipes = getInitialRecipes()
 
-generateRecipes(initialRecipes);
+//generateRecipes(initialRecipes);
 generateIngredients();
 
 function goToLarder(){
