@@ -168,47 +168,35 @@ async function getRecipes() {
   
     
     const recipeContainer = document.getElementById('recipesCard')
-    recipeContainer.innerHTML = " "
+  recipeContainer.innerHTML = " "
 
-    let searchTerms = document.getElementById('formIngredients').value.split(',')
-    searchTerms = searchTerms.map((term) => term.trim())
+  let searchTerms = document.getElementById('formIngredients').value.split(',')
 
-    //read json file and parse
-    // TODO: handle missing file
-    const ingData = await fetch('ingredients.json').then((res) => res.json())
+  //read json file and parse
+  const ingData = await fetch('ingredients.json').then((res) => res.json())
 
-    // Filter the ingredients data to only contain the ones that match the search terms
-    let searchResults = ingData.data.ingredients
-    for (let term of searchTerms) {
-        searchResults = searchResults.filter((ingredient) => ingredient.name === term)
-    }
+  // Filter the ingredients data to only contain the ones that match the search terms
+  let searchResults = ingData.data.ingredients
+  for (let term of searchTerms) {
+    searchResults = searchResults.filter((ingredient) => ingredient.name === term.trim())
+  }
 
-    // TODO: handle missing file
-    const recData = await fetch('recipes.json').then((res) => res.json())
+  // TODO: handle missing file
+  const recData = await fetch('recipes.json').then((res) => res.json())
 
-    // TODO: dropdown to allow user to select the ingredient (instead of using the first one)
-    // TODO: handle not finding any ingredients
-    let collectedRecipes = recData.data.recipes
-    for (let result of searchResults) {
-        collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
-    }
+  let collectedRecipes = recData.data.recipes
+  for (let result of searchResults) {
+    collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
+  }
 
-    // Filter out any recipes that don't have all the search ingredients
-    collectedRecipes = collectedRecipes.filter((recipe) => {
-        for (let result of searchResults) {
-            if (!recipe.ingredients.find((ing) => ing.id === result.id)) {
-                return false
-            }
-        }
-        return true
-    })
-
-    // TODO: handle not finding any recipes (show a message?)
-
+  if (searchResults.length === 0) {
+    recipeContainer.innerHTML = "No ingredients found matching the search terms."
+  } else if (collectedRecipes.length === 0) {
+    recipeContainer.innerHTML = "No recipes found using the ingredients."
+  } else {
     const recipeNames = collectedRecipes.map(recipe => recipe.name)
     generateRecipes(recipeNames)
-      
-       
+  }
     
     
   }
