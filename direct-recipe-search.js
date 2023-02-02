@@ -1,22 +1,23 @@
 const searchInput = document.getElementById("formRecipe");
 searchInput.addEventListener("keydown", function(event) {
         if (event.key == "Enter") {
-            directRecipeSearch();
+          let searchTerm = searchInput.value;
+            directRecipeSearch(searchTerm);
     }
 });
 
 
 
 
-async function directRecipeSearch() {
-    let searchTerm = searchInput.value;
+async function directRecipeSearch(term) {
     const recipeContainer = document.getElementById('recipeList')
 
     recipeContainer.innerHTML = " "
 
     //read json file and parse
-    const recData = await fetch('recipes.json').then((res) => res.json())
-    const searchResults = recData.data.recipes.filter((recipe) => recipe.name.indexOf(searchTerm))
+    const recData = await fetch('recipes.json').then((res) => res.json());
+    const searchResults = recData.data.recipes.filter((recipe) => recipe.name.toLowerCase().includes(term.toLowerCase()));
+
 
     if (searchResults.length == 0 ) {
         recipeContainer.innerHTML = "<p> No recipes found :( </p>"
