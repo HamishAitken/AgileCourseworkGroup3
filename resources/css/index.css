@@ -36,6 +36,9 @@ body{
 .rows:last-child{
   margin-bottom: 125px;
 }
+.inline-button{
+  margin-top:0px;
+}
 
 .element-flex{
   border-radius: 7px;
@@ -62,7 +65,19 @@ body{
   background-color: white;
 
 }
+.button-search-bar{
+  border: 1px solid #655F58 ;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #B6AEAE;
+  color: #655F58;
+  height: 40px;
+}
 
+.button-search-bar:hover{
+  background-color: #329E62;
+  color: white;
+}
 .color-text-brownish{
   color: #655F58;
 }
@@ -73,6 +88,7 @@ body{
   font-size: 13px;
   font-weight: bold;
   color: #A0ACA5;
+  max-width: 85%;
 }
 
 .search-bar-recipe{
@@ -80,6 +96,7 @@ body{
 }
 .search-bar:focus{
   color: #655F58;
+  border-right: 1px solid #655F58 !important;
 }
 .search-bar::placeholder {
   color: #A0ACA5;

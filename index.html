@@ -35,48 +35,55 @@
                       </a>
                   </div>
                 </div>
-                <div class="form-outline px-4 main-font searchBarTop d-sm-none mx-5">
-                  <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
-               </div>
+                <div class="container">
+                  <div class="input-group px-3 main-font searchBarTop d-sm-none d-flex justify-content-center">
+                    <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
+                    <button class="btn button-search-bar" type="button" id="searchMobileRecipe">Add</button>
+                  </div>
+                </div>
 
           </div>
+          
           <div class="navbar-custom d-flex flex-column d-none d-sm-block">
                 <p class="intro-inline text-center ">Larder</p>
-                <div class="form-outline px-4 main-font">
+                <div class="input-group px-4 main-font">
                    <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar" placeholder="Search for ingredients..." aria-label="Search for ingredients" />
-                </div>
+                   <button class="btn button-search-bar" type="button" id="button-addon2">Add</button>
+                  </div>
           </div>
-          <div class="row row-cols-1 mt-5 mt-sm-0 rows">
-            <div class="col px-5 mt-4 ">
-              <div class="card shadow-lg" style=" border-radius: 7px;">
-                <div class="card-body shadow-lg">
-                  <h5 class="card-title  text-center color-text-brownish"><img src="resources/img/baking_flours.png" class="float-left" style="border-radius: 0px;" alt="..." height="35px"><b>Baking goods</b> </h5>
-                  <div class="d-flex flex-wrap" id="bakingGoods">
-                      
+          <div class="container d-flex justify-content-center">
+            <div class="row mt-5 mt-sm-0 rows " style="width:100%;">
+              <div class="col-12 px-4 mt-4">
+                <div class="card shadow-lg" style=" border-radius: 7px;">
+                  <div class="card-body shadow-lg">
+                    <h5 class="card-title text-center color-text-brownish"><img src="resources/img/baking_flours.png" class="float-left" style="border-radius: 0px;" alt="..." height="35px"><b>Baking goods</b> </h5>
+                    <div class="d-flex flex-wrap" id="bakingGoods">
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mt-4 px-4">
+                <div class="card" style=" border-radius: 7px;">
+                  <div class="card-body shadow-lg">
+                    <h5 class="card-title  text-center color-text-brownish"><img src="resources/img/baking_flours.png" class="float-left" style="border-radius: 0px;" alt="..." height="35px"><b>Baking goods</b> </h5>
+                    <div class="d-flex flex-wrap" id="nuts">
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col mt-4 px-5">
-              <div class="card" style=" border-radius: 7px;">
-                <div class="card-body shadow-lg">
-                  <h5 class="card-title  text-center color-text-brownish"><img src="resources/img/baking_flours.png" class="float-left" style="border-radius: 0px;" alt="..." height="35px"><b>Baking goods</b> </h5>
-                  <div class="d-flex flex-wrap" id="nuts">
+              <!--When we know all groups, we can add them as follows-->
+              <!--
+              <div class="col px-5 mt-4">
+                <div class="card " style=" border-radius: 7px;">
+                  <div class="card-body shadow-lg">
+                    <h5 class="card-title  text-center color-text-brownish"><img src="resources/img/baking_flours.png" class="float-left" style="border-radius: 0px;" alt="..." height="35px"><b>Baking goods</b> </h5>
+                    <div class="d-flex flex-wrap" id="<<GROUPNAME>>" >
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <!--When we know all groups, we can add them as follows-->
-            <!--
-            <div class="col px-5 mt-4">
-              <div class="card " style=" border-radius: 7px;">
-                <div class="card-body shadow-lg">
-                  <h5 class="card-title  text-center color-text-brownish"><img src="resources/img/baking_flours.png" class="float-left" style="border-radius: 0px;" alt="..." height="35px"><b>Baking goods</b> </h5>
-                  <div class="d-flex flex-wrap" id="<<GROUPNAME>>" >
-                  </div>
-                </div>
-              </div>
-            </div>-->
+              </div>-->
 
           </div>
         </div>
@@ -88,10 +95,11 @@
                   <div class="align-self-start " style="margin-top:-55px;">
                       <img src="resources/img/Logo.png" class="px-2" alt="Logo" width="175px" height="100%" class="logoTop">
                   </div>
-                  <div class="form-outline mx-0-xs mx-5-sm px-4 main-font align-items-center flex-fill searchBarTop d-none d-sm-block">
-                     <input type="search" id="formIngredients" class="form-control mx-4 shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
-                  </div>
-                  <div class="align-items-end mx-4-sm mx-2">
+                    <div class="input-group px-2 main-font searchBarTop mx-0 w-50">
+                      <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe" placeholder="Search for recipes..." aria-label="Search for recipes"/>
+                      <button class="btn button-search-bar" type="button" id="button-search-recipe">Search</button>
+                    </div>
+                  <div class="align-items-end mx-2-sm mx-2 ">
                       <a href="" class=""><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#329E62" class="bi bi-info-circle icon-hover" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
@@ -106,10 +114,12 @@
                       </a>
                   </div>
                 </div>
-                <div class="form-outline px-4 main-font searchBarTop d-sm-none mx-5">
-                  <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
-               </div>
-
+                <div class="container">
+                  <div class="input-group px-4 main-font searchBarTop d-sm-none">
+                    <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
+                    <button class="btn button-search-bar" type="button" id="searchMobileRecipe">Add</button>
+                  </div>
+                </div>
           </div>
           <div id="recipesCard">
 

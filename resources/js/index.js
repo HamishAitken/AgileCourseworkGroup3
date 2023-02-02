@@ -1,27 +1,5 @@
 var selectedItems = [];
 
-function selectIngredient(clicked_id){
-    console.log(clicked_id);
-    el = document.getElementById(clicked_id);
-    console.log(el.style.color);
-    if(el.style.color == "rgb(255, 255, 255)"){
-        el.style.color = "#655F58";
-        el.style.backgroundColor = "#B6AEAE";
-
-        let index = selectedItems.indexOf(clicked_id);
-        if (index > -1) {
-           selectedItems.splice(index, 1); 
-        }
-        console.log(selectedItems)
-    }else{
-        el.style.color = "#FFFFFF";
-        el.style.backgroundColor = "#329E62";
-        selectedItems.push(clicked_id);
-        console.log(selectedItems);
-    }
-
-}
-
 function generateIngredients(){
     let groups = ["bakingGoods", "nuts"];
     for (let i = 0; i < groups.length; i++) {
@@ -49,9 +27,12 @@ function generateRecipes(){
         if(i%2 == 0){
             if(i!=0)document.getElementById("recipesCard").appendChild(row);
             row = document.createElement("div");
-            row.classList.add("row", "row-cols-1", "row-cols-md-2", "g-5", "mx-5");
+            row.classList.add("row", "row-cols-1", "row-cols-md-2", "g-5", "mx-sm-4", "mx-2");
             //The first row has more margin at the top, then the rest
-            if(i==0)row.classList.add("mt-5");
+            if(i==0){
+                row.classList.add("mt-5");
+                row.classList.add("mt-sm-0");
+            }
             else row.classList.add("mt-2");
             //The last row gets added an aditional Class, that adds a margin to the Last Card, so it does not overlap in the mobile version with the navbar
             if(i+2>=recipes.length){
@@ -59,7 +40,7 @@ function generateRecipes(){
             }   
         }
         let col = document.createElement("div");
-        col.classList.add("col");
+        col.classList.add("col", "mt-4");
         
         let card = document.createElement("div");
         card.classList.add("card");
