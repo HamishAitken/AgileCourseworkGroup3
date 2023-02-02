@@ -23,6 +23,20 @@ body{
     fill: #655F58;
 }
 
+.icon-hover-navbar{
+  fill: #FFFFFF;
+}
+.icon-hover-navbar:hover{
+  fill: #655F58;
+}
+
+.active-icon{
+  fill: #655F58 !important; 
+}
+.rows:last-child{
+  margin-bottom: 125px;
+}
+
 .element-flex{
   border-radius: 7px;
   background-color: #B6AEAE;
@@ -52,9 +66,7 @@ body{
 .color-text-brownish{
   color: #655F58;
 }
-.container-custom{
 
-}
 .search-bar{
   height: 40px;
   border-radius: 7px;
@@ -93,3 +105,24 @@ body{
 .view-height{
   height: 100vh;
 }
+
+
+@media (max-width:575px) { 
+  .border-right{
+    border: none;
+  }
+  .border-left{
+    border: none;
+  }
+  .logoTop{
+    width: 175px;
+    height: auto;
+    margin-top: 10px;
+  }
+  .top-bar{
+    margin-top: 75px;
+  }
+  .searchBarTop{
+    margin-top: 40px;
+  }
+ }
