@@ -1,0 +1,19 @@
+.navbar {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:50px;
+  }
+  
+  .navbar i {
+    font-size: 20px;
+    padding: 0 10px;
+  }
+
+  hr {
+    border: 2px solid #000;
+    background-color: #000;
+    height: 4px;
+  }
