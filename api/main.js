@@ -71,7 +71,7 @@ app.post('/api/login', (req, res) => {
 app.use('/api/admin', adminRouter)
 
 app.use(express.static('../web'))
-app.use('/assets', express.static('../assets'))
+app.use('/resources', express.static('../resources'))
 
 app.listen(PORT, () => {
   console.log('Listening on port:', PORT)
