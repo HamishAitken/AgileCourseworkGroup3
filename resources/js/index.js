@@ -90,9 +90,11 @@ function generateRecipes(recipesInput){
 
 
 
-//let initialRecipes = getInitialRecipes()
+getInitialRecipes().then(initialRecipes => {
+    generateRecipes(initialRecipes)
+  })
 
-//generateRecipes(initialRecipes);
+
 generateIngredients();
 
 function goToLarder(){
@@ -127,10 +129,9 @@ function goToRecipes(){
 
 
 async function getInitialRecipes() {
-    const recipeNames = []
     const recData = await fetch('recipes.json').then((res) => res.json())
     const collectedRecipes = recData.data.recipes.slice()
-    collectedRecipes.forEach((recipe) => recipeNames.push(recipe.name))
+    const recipeNames = collectedRecipes.map(recipe => recipe.name)
     return recipeNames
 }
 
