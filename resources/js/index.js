@@ -81,8 +81,11 @@ function goToLarder(){
         document.getElementById("larder").classList.remove("d-sm-block");
         document.getElementById("recipes").classList.add("d-none");
         document.getElementById("recipes").classList.add("d-sm-block");
+        document.getElementById("shopping-cart").classList.add("d-none");
+        document.getElementById("shopping-cart").classList.add("d-sm-block");
         document.getElementById("icon-larder").classList.add("active-icon");
         document.getElementById("icon-recipes").classList.remove("active-icon");
+        document.getElementById("icon-shopping-cart").classList.remove("active-icon");
     }catch(error){
         console.log(error);
     }
@@ -94,8 +97,28 @@ function goToRecipes(){
         document.getElementById("recipes").classList.remove("d-sm-block");
         document.getElementById("larder").classList.add("d-none");
         document.getElementById("larder").classList.add("d-sm-block");
+        document.getElementById("shopping-cart").classList.add("d-none");
+        document.getElementById("shopping-cart").classList.add("d-sm-block");
         document.getElementById("icon-larder").classList.remove("active-icon");
         document.getElementById("icon-recipes").classList.add("active-icon");
+        document.getElementById("icon-shopping-cart").classList.remove("active-icon");
+    }catch(error){
+        console.log(error);
+    }
+    
+}
+
+function goToShoppingList(){
+    try{
+        document.getElementById("shopping-cart").classList.remove("d-none");
+        document.getElementById("shopping-cart").classList.remove("d-sm-block");
+        document.getElementById("larder").classList.add("d-none");
+        document.getElementById("larder").classList.add("d-sm-block");
+        document.getElementById("recipes").classList.add("d-none");
+        document.getElementById("recipes").classList.add("d-sm-block");
+        document.getElementById("icon-larder").classList.remove("active-icon");
+        document.getElementById("icon-recipes").classList.remove("active-icon");
+        document.getElementById("icon-shopping-cart").classList.add("active-icon");
     }catch(error){
         console.log(error);
     }

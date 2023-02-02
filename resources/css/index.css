@@ -153,6 +153,7 @@ body{
   bottom:0px;
 	right:0px;
   border-left: 1px solid #655F58;
+  z-index: 10;
 }
 #collapseShoppingCart div p{
   font-size: 15px;
@@ -179,5 +180,8 @@ body{
   }
   .searchBarTop{
     margin-top: 40px;
+  }
+  #collapseShoppingCart{
+    display: none;
   }
  }
