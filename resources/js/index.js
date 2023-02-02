@@ -169,35 +169,42 @@ async function getRecipes() {
     
     const recipeContainer = document.getElementById('recipesCard')
     recipeContainer.innerHTML = " "
-    
+
     let searchTerms = document.getElementById('formIngredients').value.split(',')
-        
-      
-        
-      
+    searchTerms = searchTerms.map((term) => term.trim())
+
     //read json file and parse
     // TODO: handle missing file
     const ingData = await fetch('ingredients.json').then((res) => res.json())
-      
+
     // Filter the ingredients data to only contain the ones that match the search terms
     let searchResults = ingData.data.ingredients
     for (let term of searchTerms) {
-        searchResults = searchResults.filter((ingredient) => ingredient.name === term.trim())
+        searchResults = searchResults.filter((ingredient) => ingredient.name === term)
     }
-      
+
     // TODO: handle missing file
     const recData = await fetch('recipes.json').then((res) => res.json())
-      
+
     // TODO: dropdown to allow user to select the ingredient (instead of using the first one)
     // TODO: handle not finding any ingredients
-    let collectedRecipes = recData.data.recipes.filter(recipe => {
-        return searchResults.every(ingredient => {
-            return recipe.ingredients.some(ing => ing.id === ingredient.id);
-        });
-    });
-      
+    let collectedRecipes = recData.data.recipes
+    for (let result of searchResults) {
+        collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
+    }
+
+    // Filter out any recipes that don't have all the search ingredients
+    collectedRecipes = collectedRecipes.filter((recipe) => {
+        for (let result of searchResults) {
+            if (!recipe.ingredients.find((ing) => ing.id === result.id)) {
+                return false
+            }
+        }
+        return true
+    })
+
     // TODO: handle not finding any recipes (show a message?)
-      
+
     const recipeNames = collectedRecipes.map(recipe => recipe.name)
     generateRecipes(recipeNames)
       
