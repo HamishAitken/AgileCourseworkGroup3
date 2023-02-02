@@ -167,36 +167,33 @@ async function getRecipes() {
     // generateRecipes(recipeNames)
   
     
-    const recipeContainer = document.getElementById('recipesCard')
-  recipeContainer.innerHTML = " "
-
-  let searchTerms = document.getElementById('formIngredients').value.split(',')
-
-  //read json file and parse
-  const ingData = await fetch('ingredients.json').then((res) => res.json())
-
-  // Filter the ingredients data to only contain the ones that match the search terms
-  let searchResults = ingData.data.ingredients
-  for (let term of searchTerms) {
-    searchResults = searchResults.filter((ingredient) => ingredient.name === term.trim())
-  }
-
-  // TODO: handle missing file
-  const recData = await fetch('recipes.json').then((res) => res.json())
-
-  let collectedRecipes = recData.data.recipes
-  for (let result of searchResults) {
-    collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
-  }
-
-  if (searchResults.length === 0) {
-    recipeContainer.innerHTML = "No ingredients found matching the search terms."
-  } else if (collectedRecipes.length === 0) {
-    recipeContainer.innerHTML = "No recipes found using the ingredients."
-  } else {
-    const recipeNames = collectedRecipes.map(recipe => recipe.name)
-    generateRecipes(recipeNames)
-  }
+    const recipeContainer = document.getElementById('recipesCard');
+    recipeContainer.innerHTML = "";
+  
+    let searchTerms = document.getElementById('formIngredients').value.split(',');
+  
+    const ingData = await fetch('ingredients.json').then(res => res.json());
+    let searchResults = ingData.data.ingredients;
+    
+    for (let term of searchTerms) {
+      searchResults = searchResults.filter(ingredient => ingredient.name.trim() === term.trim());
+    }
+  
+    const recData = await fetch('recipes.json').then(res => res.json());
+    let collectedRecipes = recData.data.recipes;
+    
+    for (let result of searchResults) {
+      collectedRecipes = collectedRecipes.filter(recipe => recipe.ingredients.find(ing => ing.id === result.id));
+    }
+  
+    if (!searchResults.length) {
+      recipeContainer.innerHTML = "No ingredients found matching the search terms.";
+    } else if (!collectedRecipes.length) {
+      recipeContainer.innerHTML = "No recipes found using the ingredients.";
+    } else {
+      const recipeNames = collectedRecipes.map(recipe => recipe.name);
+      generateRecipes(recipeNames);
+    }
     
     
   }
