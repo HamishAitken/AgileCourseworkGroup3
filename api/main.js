@@ -5,7 +5,7 @@ const helmet = require('helmet')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const db = require('./database.js')
+const db = require('./utils/database.js')
 
 const recipeRouter = require('./routes/recipes.js')
 const ingredientRouter = require('./routes/ingredients.js')
@@ -35,6 +35,7 @@ app.use(
   morgan(':remote-addr - :remote-user [:date[iso]] :method :url :status (:response-time ms) - :res[content-length]')
 )
 
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.use('/', express.static('../web'))
@@ -57,7 +58,14 @@ app.post('/api/login', (req, res) => {
       res.status(401).send(JSON.stringify({ error: 'Invalid login/password' }))
     } else {
       // TODO: generate and send JWT
-      const token = jwt.sign({ username: user.username }, process.env.SECRET, { expiresIn: 60 * 60 * 6 /* 6 hours */ })
+      const token = jwt.sign(
+        {
+          username: user.username,
+          role: 'admin',
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: 60 * 60 * 6 /* 6 hours */ }
+      )
       res.json({
         token,
         username: user.username,
@@ -65,6 +73,12 @@ app.post('/api/login', (req, res) => {
     }
   })
 })
+
+// app.post('/api/verify', (req, res) => {
+//   const token = jwt.verify(req.body.token, process.env.JWT_SECRET)
+//   console.log(token)
+//   res.status(200).send()
+// })
 
 app.use('/api/recipes', recipeRouter)
 app.use('/api/ingredients', ingredientRouter)

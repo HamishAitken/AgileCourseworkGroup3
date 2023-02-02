@@ -1,4 +1,6 @@
-const db = require('../database.js')
+const db = require('../utils/database.js')
+const { withJWTRole } = require('../utils/middlewares.js')
+
 const ingredientRouter = require('express').Router()
 
 var ingredientsCollection = db.getCollection('ingredients')
@@ -14,9 +16,9 @@ const ingredientDocumentToJson = (ingredient) => {
   }
 }
 
-ingredientRouter.post('/', (req, res) => {
+ingredientRouter.post('/', withJWTRole('admin'), (req, res) => {
   // TODO: validation. even thogh only authorized users can add recipes, we should probably still do some checks
-  const { body } = req
+  const body = req.body
   const ingredient = ingredientsCollection.insertOne({
     name: body.name,
     category: body.category,
