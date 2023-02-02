@@ -95,6 +95,10 @@
     </div>
 
     <script>
+      const token = JSON.parse(localStorage.getItem('token'))
+      if (!token) {
+        window.location.href = '/login.html'
+      }
       const searchbar = document.getElementById('search_bar')
       searchbar.addEventListener('keyup', function (event) {
         if (event.key === 'Enter' && searchbar.value != '') {
@@ -113,6 +117,50 @@
             })
         }
       })
+
+      fetch('/api/admin/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token,
+        }),
+      })
+        .then((res) => {
+          const status_code = res.status
+
+          return res.json().then((response) => ({ status_code, response }))
+        })
+        .then((status_code, response) => {
+          const status = status_code.status_code
+          const recipes = status_code.response
+
+          if (status === 200) {
+            console.log(recipes)
+            const recipe_container = document.getElementById('recipe-container')
+            let innerdata = ''
+            for (let i = 0; i < recipes.length; i++) {
+              innerdata += `
+    <tr>
+      <td>${recipes[i].recipe}</td>
+      <td>...</td>
+      <td>....</td>
+      <td>
+        <button class="btn btn-primary">edit</button>
+      </td>
+      <td>
+        <button id="delete"class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+              
+    `
+            }
+            recipe_container.innerHTML = innerdata
+          } else {
+            console.log('error')
+          }
+        })
     </script>
     <!--display all recipes-->
     <div class="container">
@@ -134,41 +182,7 @@
                 <th>delete</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Recipe 1</td>
-                <td>Ingredients 1</td>
-                <td>Image 1</td>
-                <td>
-                  <button class="btn btn-primary">edit</button>
-                </td>
-                <td>
-                  <button class="btn btn-danger">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Recipe 2</td>
-                <td>Ingredients 2</td>
-                <td>Image 2</td>
-                <td>
-                  <button class="btn btn-primary">edit</button>
-                </td>
-                <td>
-                  <button class="btn btn-danger">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Recipe 3</td>
-                <td>Ingredients 3</td>
-                <td>Image 3</td>
-                <td>
-                  <button class="btn btn-primary">edit</button>
-                </td>
-                <td>
-                  <button class="btn btn-danger">Delete</button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="recipe-container"></tbody>
           </table>
         </div>
       </div>
