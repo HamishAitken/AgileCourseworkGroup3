@@ -34,12 +34,15 @@ ingredientRouter.get('/', (_, res) => {
 
 ingredientRouter.get('/:id', (req, res) => {
   const ingredient = ingredientsCollection.get(req.params.id)
-  if (!ingredient) return res.status(404).json({ error: 'Ingredient not found' })
-  res.json(ingredientDocumentToJson(ingredient))
+  if (!ingredient) {
+    res.status(404).json({ error: 'Ingredient not found' })
+  } else {
+    res.json(ingredientDocumentToJson(ingredient))
+  }
 })
 
 ingredientRouter.post('/search_by_name', (req, res) => {
-  const search = req.body.search_term
+  const search = req.body.search_value
 
   if (!search || search.length < 3) return res.status(400).json({ error: 'Invalid search query' })
 

@@ -1,40 +1,64 @@
 const urlParams = new URLSearchParams(window.location.search)
 const id = urlParams.get('id')
 
-fetch('/api/recipes/')
+fetch(`/api/recipes/${id}`)
   .then((res) => res.json())
   .then((data) => {
+    // TODO: check whether a recipe was returned, instead of an error
+    // TODO: #11 add a share recipe link which would allow user to share the page
     const recipe_title = document.getElementById('recipe_title')
     const recipe_image = document.getElementById('recipe_image')
     const recipe_instructions = document.getElementById('recipe_instructions')
     const recipe_ingredients = document.getElementById('recipe_ingredients')
 
-    for (let i=0;i<data.length;i++) {
-      
-      if ( data[i].id==id) {
-        console.log(data[i].id)
+    recipe_title.innerHTML = data.name
 
-        const instructions = data[i].preparation_steps.replace(/\n/g, '</br>');
+    // TODO: add cooking time
 
-        // parse ingredient and form an object
-        const ingredients = data[i].ingredients;
-        for (let j=0;j<ingredients.length;j++) {
-          recipe_ingredients.innerHTML += `
-     <li>${ingredients[j].ingredient}---${ingredients[j].id}</li>
-     `
-        }
+    // TODO: add serves x people
 
-        recipe_title.innerHTML += `
-         <h4 class="text-center">${data[i].name}</h4>
-         `
+    // TODO: add description
 
-        recipe_image.innerHTML = `
-      <img src="${data[i].image}" class="img-fluid" alt="...">
+    // parse ingredient and form an object
+    const ingredients = data.ingredients
+    recipe_ingredients.innerHTML = ''
+    for (let j = 0; j < ingredients.length; j++) {
+      recipe_ingredients.innerHTML += `
+      <li class="mb-2">
+        <div class="d-flex flex-row flex-row-table align-content-start">
+          <p class="mb-1 align-self-center">${ingredients[j].ingredient}</p>
+          <button
+            type="button"
+            onclick="addToShoppingCart(this)"
+            class="btn btn-outline-success ms-auto p-2"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add to Shopping List"
+            id="${ingredients[j].id}"
+          ></button>
+        </div>
+      </li>
       `
+    }
 
-        recipe_instructions.innerHTML = `
+    recipe_image.innerHTML = `
+    <img src="${data.image}" class="img-fluid" alt="Recipe">
+    `
+
+    // TODO: render markdown? At least make the list "fancy", that is use list elements from details_page.html
+    const instructions = data.preparation_steps.replace(/\n/g, '</br>')
+    recipe_instructions.innerHTML = `
       <p id="markdown">${instructions}</p>
       `
-      }
-    }
   })
+
+function addToShoppingCart(element) {
+  //Get the Text of the <p> Element of the List where the button was clicked.
+  // TODO: save ingredient IDs instead of ingredient names. Use the IDs in the cart to group and add links to similar ingredients.
+  let text = element.previousElementSibling.innerText
+  console.log(text)
+  var cart = JSON.parse(localStorage.getItem('cart'))
+  if (cart === null) cart = []
+  cart.push(text)
+  localStorage.setItem('cart', JSON.stringify(cart))
+}
