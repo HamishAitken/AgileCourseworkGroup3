@@ -1,19 +1,32 @@
-.navbar {
-  background-color: #333;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-}
+  .return {
+    margin-bottom: -20px;
+  }
 
-.navbar i {
-  font-size: 20px;
-  padding: 0 10px;
-}
+  .return a{
+    text-decoration: none;
+    color: white;
+  }
+  .return a:hover, .return a:active{
+    fill: #504b46;
+    color: #504b46;
+  }
 
-hr {
-  border: 2px solid #000;
-  background-color: #000;
-  height: 4px;
-}
+  .return svg:hover{
+    fill: #504b46;
+    transform: scale(1.2);
+  }
+  .btn-mini{
+    transform: scale(0.6);
+  }
+  .btn-mini span{
+    margin-bottom: -10px !important;
+  }
+
+  .flex-row-table{
+    height: 15px;
+  }
+
+  .navbar-link{
+    text-decoration: none;
+    color: white;
+  }

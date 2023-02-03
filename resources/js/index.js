@@ -1,27 +1,5 @@
 var selectedItems = [];
 
-function selectIngredient(clicked_id){
-    console.log(clicked_id);
-    el = document.getElementById(clicked_id);
-    console.log(el.style.color);
-    if(el.style.color == "rgb(255, 255, 255)"){
-        el.style.color = "#655F58";
-        el.style.backgroundColor = "#B6AEAE";
-
-        let index = selectedItems.indexOf(clicked_id);
-        if (index > -1) {
-           selectedItems.splice(index, 1); 
-        }
-        console.log(selectedItems)
-    }else{
-        el.style.color = "#FFFFFF";
-        el.style.backgroundColor = "#329E62";
-        selectedItems.push(clicked_id);
-        console.log(selectedItems);
-    }
-
-}
-
 function generateIngredients(){
     let groups = ["bakingGoods", "nuts"];
     for (let i = 0; i < groups.length; i++) {
@@ -36,7 +14,6 @@ function generateIngredients(){
             ingredient.innerText = ingredients[j];
             ingredient.setAttribute("onclick", "selectIngredient(this.id)");
             elGroup.appendChild(ingredient);   
-            console.log(ingredient);
         }
     }  
 }
@@ -49,9 +26,12 @@ function generateRecipes(recipesInput){
         if(i%2 == 0){
             if(i!=0)document.getElementById("recipesCard").appendChild(row);
             row = document.createElement("div");
-            row.classList.add("row", "row-cols-1", "row-cols-md-2", "g-5", "mx-5");
+            row.classList.add("row", "row-cols-1", "row-cols-md-2", "g-5", "mx-sm-4", "mx-2");
             //The first row has more margin at the top, then the rest
-            if(i==0)row.classList.add("mt-5");
+            if(i==0){
+                row.classList.add("mt-5");
+                row.classList.add("mt-sm-0");
+            }
             else row.classList.add("mt-2");
             //The last row gets added an aditional Class, that adds a margin to the Last Card, so it does not overlap in the mobile version with the navbar
             if(i+2>=recipes.length){
@@ -59,7 +39,7 @@ function generateRecipes(recipesInput){
             }   
         }
         let col = document.createElement("div");
-        col.classList.add("col");
+        col.classList.add("col", "mt-4");
         
         let card = document.createElement("div");
         card.classList.add("card");
@@ -93,14 +73,85 @@ getInitialRecipes().then(initialRecipes => {
   })
 generateIngredients();
 
+function removeFromShoppingCart(element){
+    //Get the Text of the <p> Element of the List where the button was clicked.
+    let text = element.previousElementSibling.innerText;
+    var cart = JSON.parse(localStorage.getItem("cart"));
+    let index = cart.indexOf(text);
+    if (index > -1) cart.splice(index, 1); 
+    
+    element.parentElement.parentElement.remove();
+    localStorage.setItem("cart", JSON.stringify(cart));
+    if (cart.length == 0) localStorage.removeItem("cart");
+}
+
+/**
+ * Generates the shopping cart html in following format:
+ * <li class="mb-2">
+        <div class="d-flex flex-row flex-row-table align-content-start ">
+            <p class="mb-1 align-self-center"><<INGREDIENT>></p>
+            <button type="button" onclick="removeFromShopnpingCart(this)" class="btn btn-outline-success ms-auto p-2" data-toggle="tooltip" data-placement="top" title="Add to Shopping List"></button>
+        </div>
+   </li>
+ */
+function generateShoppingCart(){
+    var shopping = document.getElementById("shopping-list");
+    var shopping_mobile = document.getElementById("shopping-list-mobile");
+    var ul = document.createElement("ul");
+    var cart = JSON.parse(localStorage.getItem("cart"));
+    if (cart === null || cart.legnth === 0) {
+        let par = document.createElement("p");
+        par.innerText = "The Shopping-list appears to be empty";
+        par.classList.add("ms-4");
+        shopping.appendChild(par);
+        shopping_mobile.appendChild(par);
+        return;
+    }
+    for(let i = 0;i<cart.length;i++){
+        let li = document.createElement("li");
+        li.classList.add("mb-2");
+        
+        let div = document.createElement("div");
+        div.classList.add("d-flex","flex-row", "flex-row-table",  "align-content-start");
+        
+        let p = document.createElement("p");
+        p.classList.add("mb-1", "align-self-center");
+        p.innerText = cart[i];
+
+        let button = document.createElement("button");
+        button.classList.add("btn", "btn-outline-danger", "ms-auto", "p-2");
+        button.setAttribute("type", "button");
+        button.setAttribute("data-toggle", "tooltip");
+        button.setAttribute("data-placemen", "top");
+        button.setAttribute("title", "Remove from shoppping-list");
+        button.setAttribute("onclick", "removeFromShoppingCart(this)");
+        button.innerText = "X";
+
+        div.appendChild(p);
+        div.appendChild(button);
+
+        li.appendChild(div);
+        ul.appendChild(li);
+
+    }
+    shopping_mobile.appendChild(ul);
+    let ul_clone = ul.cloneNode(true);
+    shopping.appendChild(ul_clone);
+}
+
+
+generateShoppingCart();
 function goToLarder(){
     try{
         document.getElementById("larder").classList.remove("d-none");
         document.getElementById("larder").classList.remove("d-sm-block");
         document.getElementById("recipes").classList.add("d-none");
         document.getElementById("recipes").classList.add("d-sm-block");
+        document.getElementById("shopping-cart").classList.add("d-none");
+        document.getElementById("shopping-cart").classList.add("d-sm-block");
         document.getElementById("icon-larder").classList.add("active-icon");
         document.getElementById("icon-recipes").classList.remove("active-icon");
+        document.getElementById("icon-shopping-cart").classList.remove("active-icon");
     }catch(error){
         console.log(error);
     }
@@ -112,14 +163,41 @@ function goToRecipes(){
         document.getElementById("recipes").classList.remove("d-sm-block");
         document.getElementById("larder").classList.add("d-none");
         document.getElementById("larder").classList.add("d-sm-block");
+        document.getElementById("shopping-cart").classList.add("d-none");
+        document.getElementById("shopping-cart").classList.add("d-sm-block");
         document.getElementById("icon-larder").classList.remove("active-icon");
         document.getElementById("icon-recipes").classList.add("active-icon");
+        document.getElementById("icon-shopping-cart").classList.remove("active-icon");
     }catch(error){
         console.log(error);
     }
     
 }
 
+function goToShoppingList(){
+    try{
+        document.getElementById("shopping-cart").classList.remove("d-none");
+        document.getElementById("shopping-cart").classList.remove("d-sm-block");
+        document.getElementById("larder").classList.add("d-none");
+        document.getElementById("larder").classList.add("d-sm-block");
+        document.getElementById("recipes").classList.add("d-none");
+        document.getElementById("recipes").classList.add("d-sm-block");
+        document.getElementById("icon-larder").classList.remove("active-icon");
+        document.getElementById("icon-recipes").classList.remove("active-icon");
+        document.getElementById("icon-shopping-cart").classList.add("active-icon");
+    }catch(error){
+        console.log(error);
+    }
+    
+}
+
+const queryString = window.location.search;
+if(queryString.split("?").length>1){
+    site = queryString.split("?")[1].split("=")[1];
+    if(site == "larder") goToLarder();
+    else if(site == "recipes") goToRecipes();
+    else if(site == "cart") goToShoppingList();
+}
 
 async function getInitialRecipes() {
     const recData = await fetch('recipes.json').then((res) => res.json())

@@ -36,6 +36,9 @@ body{
 .rows:last-child{
   margin-bottom: 125px;
 }
+.inline-button{
+  margin-top:0px;
+}
 
 .element-flex{
   border-radius: 7px;
@@ -62,7 +65,19 @@ body{
   background-color: white;
 
 }
+.button-search-bar{
+  
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #B6AEAE;
+  color: #655F58;
+  height: 40px;
+}
 
+.button-search-bar:hover{
+  background-color: #329E62;
+  color: white;
+}
 .color-text-brownish{
   color: #655F58;
 }
@@ -73,6 +88,8 @@ body{
   font-size: 13px;
   font-weight: bold;
   color: #A0ACA5;
+  max-width: 85%;
+  border: 1px solid #655F58;
 }
 
 .search-bar-recipe{
@@ -105,6 +122,45 @@ body{
 .view-height{
   height: 100vh;
 }
+.float{
+	position:fixed;
+	width:50px;
+	height:50px;
+	bottom:20px;
+	right:20px;
+	background-color:#655F58;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #504b46;
+  text-decoration: none !important;
+}
+.float:hover svg{
+  text-decoration: none !important;
+  fill: #329E62;
+}
+.my-float{
+	margin-top:17px;
+}
+.my-float:hover{
+	fill: #329E62;
+}
+
+#collapseShoppingCart .div-collapse{
+  position: fixed;
+  height: 100vh;
+  width: 200px;
+  bottom:0px;
+	right:0px;
+  border-left: 1px solid #655F58;
+  z-index: 10;
+}
+#collapseShoppingCart div p{
+  font-size: 15px;
+}
+#close-icon{
+  right: 220px !important;
+}
 
 
 @media (max-width:575px) { 
@@ -124,5 +180,8 @@ body{
   }
   .searchBarTop{
     margin-top: 40px;
+  }
+  #collapseShoppingCart{
+    display: none;
   }
  }
