@@ -36,14 +36,26 @@
                   </div>
                 </div>
                 <div class="form-outline px-4 main-font searchBarTop d-sm-none mx-5">
-                  <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
+                  <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for ingredients... (e.g rice,onions)" aria-label="Search for recipes"/>
+                  <!-- Ingredient input -->
+                  <button type="button" class="btn btn-success" onclick="getRecipes()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                   </button>
                </div>
 
           </div>
           <div class="navbar-custom d-flex flex-column d-none d-sm-block">
                 <p class="intro-inline text-center ">Larder</p>
                 <div class="form-outline px-4 main-font">
-                   <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar" placeholder="Search for ingredients..." aria-label="Search for ingredients" />
+                   <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar" placeholder="Search for ingredients... (e.g rice,onions)" aria-label="Search for ingredients" />
+                    <!-- Ingredient input -->
+                    <button type="button" class="btn btn-success" onclick="getRecipes()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>
+                     </button>
                 </div>
           </div>
           <div class="row row-cols-1 mt-5 mt-sm-0 rows">
@@ -89,7 +101,7 @@
                       <img src="resources/img/Logo.png" class="px-2" alt="Logo" width="175px" height="100%" class="logoTop">
                   </div>
                   <div class="form-outline mx-0-xs mx-5-sm px-4 main-font align-items-center flex-fill searchBarTop d-none d-sm-block">
-                     <input type="search" id="formIngredients" class="form-control mx-4 shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
+                     <input type="search" id="formRecipes" class="form-control mx-4 shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
                   </div>
                   <div class="align-items-end mx-4-sm mx-2">
                       <a href="" class=""><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#329E62" class="bi bi-info-circle icon-hover" viewBox="0 0 16 16">
@@ -107,7 +119,7 @@
                   </div>
                 </div>
                 <div class="form-outline px-4 main-font searchBarTop d-sm-none mx-5">
-                  <input type="search" id="formIngredients" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
+                  <input type="search" id="formRecipes" class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch" placeholder="Search for recipes..." aria-label="Search for recipes"/>
                </div>
 
           </div>
