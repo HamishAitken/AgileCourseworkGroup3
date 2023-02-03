@@ -76,10 +76,5 @@ recipeRouter.post('/search_by_name', (req, res) => {
     res.json(matchingRecipes.map(recipeDocumentToJson))
   }
 })
-recipeRouter.post('/search_by_name', (req, res)=>{
-  const recipe= req.body.recipeobj;
-  console.log(recipe);
-});
-
 
 module.exports = recipeRouter
