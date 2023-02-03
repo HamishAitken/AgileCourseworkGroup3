@@ -79,8 +79,10 @@ function removeFromShoppingCart(element){
     var cart = JSON.parse(localStorage.getItem("cart"));
     let index = cart.indexOf(text);
     if (index > -1) cart.splice(index, 1); 
+    
     element.parentElement.parentElement.remove();
     localStorage.setItem("cart", JSON.stringify(cart));
+    if (cart.length == 0) localStorage.removeItem("cart");
 }
 
 /**
