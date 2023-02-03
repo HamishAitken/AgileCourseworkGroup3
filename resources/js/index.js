@@ -99,7 +99,7 @@ function generateShoppingCart(){
     var shopping_mobile = document.getElementById("shopping-list-mobile");
     var ul = document.createElement("ul");
     var cart = JSON.parse(localStorage.getItem("cart"));
-    if(cart == null){
+    if (cart === null || cart.legnth === 0) {
         let par = document.createElement("p");
         par.innerText = "The Shopping-list appears to be empty";
         par.classList.add("ms-4");
