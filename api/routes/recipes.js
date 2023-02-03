@@ -3,7 +3,7 @@ const { withJWTRole } = require('../utils/middlewares.js')
 
 const recipeRouter = require('express').Router()
 
-var recipesCollection = db.getCollection('recipes');
+var recipesCollection = db.getCollection('recipes')
 db.on('loaded', () => (recipesCollection = db.getCollection('recipes')))
 
 const recipeDocumentToJson = (recipe) => {
@@ -31,31 +31,27 @@ recipeRouter.post('/', withJWTRole('admin'), (req, res) => {
 recipeRouter.get('/', (_, res) => {
   res.json(recipesCollection.data.map(recipeDocumentToJson))
 })
-//search by id
-recipeRouter.post('/id', (req, res) => {
-  const id = parseInt(req.body.id);
-  const matchingRecipes = db.getCollection('recipes').find({ ingredients: { $elemMatch: { id: id } } });
-  if(matchingRecipes.length===0){
+
+recipeRouter.get('/:id', (req, res) => {
+  const recipe = recipesCollection.by(req.params.id)
+  if (!recipe) {
+    res.status(404).json({ error: 'Recipe not found' })
+  } else {
+    res.json(recipeDocumentToJson(recipe))
+  }
+})
+
+recipeRouter.post('/search_by_name', (req, res) => {
+  const search = req.body.search_value
+  if (!search || search.length() < 3) res.status(400).json({ error: 'Invalid search query' })
+  const regex = new RegExp(search, 'i')
+
+  const matchingRecipes = recipesCollection.where((recipe) => regex.test(recipe.name))
+  if (matchingRecipes.length === 0) {
     res.status(404).json({ error: 'No recipes found' })
+  } else {
+    res.json(matchingRecipes.map(recipeDocumentToJson))
   }
-  else{
-    res.json(matchingRecipes.map(recipeDocumentToJson));
-  }
-});
-//search for recipes
-recipeRouter.post('/search_recipes', (req, res) => {
-  const search = req.body.search_value;
-
-  const regex = new RegExp(search, "i");
- 
-  const matchingRecipes = recipesCollection.data.filter((recipe) => regex.test(recipe.name));
-if(matchingRecipes.length===0){
-  res.status(404).json({ error: 'No recipes found' })
-}else{
- res.json(matchingRecipes.map(recipeDocumentToJson));
-}
-});
-
-
+})
 
 module.exports = recipeRouter

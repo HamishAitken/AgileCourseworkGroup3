@@ -91,23 +91,16 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
+          // TODO: fix this, wrong JSON format
           body: JSON.stringify({
             recipe,
-            token,
           }),
         })
-          .then((res) => {
-            const status_code = res.status
-
-            return res.json().then((response) => ({ status_code, response }))
-          })
-
-          .then((status_code, response) => {
-            const status = status_code.status_code
-            const token = status_code.response
-
-            if (status === 200) {
+          .then((res) => res.json().then((response) => [res.status, response]))
+          .then(([status_code, response]) => {
+            if (status_code === 200) {
               alert('recipe created successfully')
               window.location.href = '/admin.html'
             } else {

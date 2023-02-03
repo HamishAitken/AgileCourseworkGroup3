@@ -1,4 +1,3 @@
-
 var selectedItems = []
 
 function selectIngredient(clicked_id) {
@@ -50,22 +49,16 @@ function generateIngredients() {
 }
 */
 
-//just fetch some recipes may be limited to 10 recipes 
-fetch('/api/recipes/',{
-    method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }).then((res) =>res.json())
-        .then((data)=>{
-   
-            const recipe_card=document.getElementById('recipesCard');
-            let recipeHTML='';
-            for(const element of data){
-       
-                const id=element.id;
-                
-               recipeHTML +=`
+//just fetch some recipes may be limited to 10 recipes
+fetch('/api/recipes/')
+  .then((res) => res.json())
+  .then((data) => {
+    const recipe_card = document.getElementById('recipesCard')
+    let recipeHTML = ''
+    for (const element of data) {
+      const id = element.id
+
+      recipeHTML += `
 
               <a href="/details_page.html?id=${id}">
                <div class="col h-100">
@@ -92,39 +85,31 @@ fetch('/api/recipes/',{
       image.src = 'https://www.floatex.com/wp-content/uploads/2016/04/dummy-post-horisontal.jpg'
     }
   })
+const search_recipes = document.getElementById('search_recipes')
 //search for recipes using title
-const search = document.getElementById('search_recipes')
+search_recipes.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    const search_value = search_recipes.value
+    search_recipes.value = ''
 
-search.addEventListener('keyup', (e) => {
-    if(e.key==="Enter"){
-    const search_value=document.getElementById('search_recipes').value;
-  document.getElementById('search_recipes').value = '';
+    fetch('/api/recipes/search_by_name', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        search_value,
+      }),
+    })
+      .then((res) => res.json().then((response) => [res.status, response]))
+      .then(([status_code, data]) => {
+        // TODO: better error message (show a special text?)
+        if (status_code === 200) {
+          const recipe_card = document.getElementById('recipesCard')
+          let recipeHTML = ''
 
-    fetch('/api/recipes/search_recipes',{
-
-    method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-           search_value
-          }),
-        })
-          .then((res) => {
-            const status = res.status;
-             return res.json().then((response) => ({ status, response }))
-          })
-          
-            .then((status,response) => {
-                const status_code=status.status;
-                const data=status.response;
-                if(status_code===200){
-                    console.log(data);
-                    const recipe_card=document.getElementById('recipesCard');
-                  
-                    let recipeHTML='';
-                for(const element of data){
-                 recipeHTML +=`
+          for (const element of data) {
+            recipeHTML += `
                     <a href="/details_page.html?id=${element.id}">
                     <div class="col h-100">
                     <div class="card" style="border-radius:7px;">
@@ -142,80 +127,53 @@ search.addEventListener('keyup', (e) => {
                     </a>
 
                  
-                 `;
-                    recipe_card.innerHTML = recipeHTML;
+                 `
+            recipe_card.innerHTML = recipeHTML
+          }
+        } else {
+          alert('No recipes found!')
+        }
+      })
+  }
+})
 
-                }
-                  
-                }
-                else{
-                   
-                    alert('Error 404:no recipe found');
-                
-                }
-            })
-    
+//fetch ingredients
+fetch('/api/ingredients/')
+  .then((res) => res.json())
+  .then((data) => {
+    const elements = data
+    const ingredientContainer = document.getElementById('ingredients_container')
+    let ingredientHTML = ''
+    for (let i = 0; i < elements.length; i++) {
+      if (i < 10) {
+        const id = elements[i].id
+        const name = elements[i].name
+        const image = elements[i].image
 
-    }
-});
-
-  //fetch ingredients
-
-    fetch('/api/ingredients/',{
-    method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }).then((res) =>res.json())
-        .then((data) => {
-            const elements = data;
-            const ingredientContainer = document.getElementById('ingredients_container');
-            let ingredientHTML = '';
-            for (let i = 0; i < elements.length; i++) {
-              if (i < 10) {
-                const id = elements[i].id;
-                const name = elements[i].name;
-                const image = elements[i].image;
-          
-                ingredientHTML += `
+        ingredientHTML += `
                   <p class="element-flex ing_id" value="${id}">${name}</p>
-                `;
-              }
-            }
-            ingredientContainer.innerHTML = ingredientHTML;
-          
-            const ingIdElements = document.querySelectorAll('.ing_id');
-            ingIdElements.forEach((ingIdElement) => {
-              ingIdElement.addEventListener('click', function() {
-                if (!this.getAttribute('value')) {
-             console.log('no value')
-                }
-                const id = this.getAttribute('value');
-                //find a recipe using ingredients
-              fetch('/api/recipes/id',{
-                method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body:JSON.stringify({
-                            id
-                            })
-                        
-                        })
-                        .then((res) => {
-                            const status = res.status;
-                            return res.json().then((response) => ({ status, response }))
-                        }
-                        )
-                        .then((status, response) => {
-                            const status_code = status.status;
-                            const data = status.response;
-                            if (status_code === 200) {
-                                console.log(data);
-                                const recipe_card = document.getElementById('recipesCard');
-                                let recipeHTML = '';
-                                for (const element of data) {
-                                    recipeHTML += `
+                `
+      }
+    }
+    ingredientContainer.innerHTML = ingredientHTML
+
+    const ingIdElements = document.querySelectorAll('.ing_id')
+    ingIdElements.forEach((ingIdElement) => {
+      ingIdElement.addEventListener('click', function () {
+        if (!this.getAttribute('value')) {
+          console.log('no value')
+        }
+        const id = this.getAttribute('value')
+        //find a recipe using ingredients
+        fetch(`/api/recipes/${id}`)
+          .then((res) => res.json().then((response) => [res.status, response]))
+          .then(([status_code, data]) => {
+            if (status_code === 200) {
+              console.log(data)
+              const recipe_card = document.getElementById('recipesCard')
+              let recipeHTML = ''
+              for (const element of data) {
+                recipeHTML += `
                     <a href="/details_page.html?id=${element.id}">
                     <div class="col h-100">
                     <div class="card" style="border-radius:7px;">
@@ -231,39 +189,37 @@ search.addEventListener('keyup', (e) => {
                     </div>
                     </div>
                     </a>
-                    `;
-                                    recipe_card.innerHTML = recipeHTML;
+                    `
+                recipe_card.innerHTML = recipeHTML
+              }
             }
-            }                  
-              })
-              });
-            });
-          });
+          })
+      })
+    })
+  })
 
+//search for ingredients
+const search_ingredients = document.getElementById('search_ingredients')
+search_ingredients.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    const search_term = search_ingredients.value
+    document.getElementById('search_ingredients').value = ''
+    fetch('/api/ingredients/search_by_name', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        search_term,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+      })
+  }
+})
 
-  //search for ingredients
-    const search_ingredients = document.getElementById('search_ingredients');
-    search_ingredients.addEventListener('keyup', (e) => {
-        if(e.key==="Enter"){
-        const search_term = search_ingredients.value;
-        document.getElementById('search_ingredients').value = '';
-        fetch('/api/ingredients/search_ingredients', {
-            method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            search_term
-            }),
-        
-        }).then((res) => res.json())
-        .then((data) => {
-console.log(data)
-
-        })
-        }})
-
-       
 /*
 function generateRecipes() {
   //API Call to retrieve those here
@@ -316,21 +272,19 @@ function generateRecipes() {
 generateIngredients()
 */
 
-
-
 //generateIngredients();
 
-function goToLarder(){
-    try{
-        document.getElementById("larder").classList.remove("d-none");
-        document.getElementById("larder").classList.remove("d-sm-block");
-        document.getElementById("recipes").classList.add("d-none");
-        document.getElementById("recipes").classList.add("d-sm-block");
-        document.getElementById("icon-larder").classList.add("active-icon");
-        document.getElementById("icon-recipes").classList.remove("active-icon");
-    }catch(error){
-        console.log(error);
-    }
+function goToLarder() {
+  try {
+    document.getElementById('larder').classList.remove('d-none')
+    document.getElementById('larder').classList.remove('d-sm-block')
+    document.getElementById('recipes').classList.add('d-none')
+    document.getElementById('recipes').classList.add('d-sm-block')
+    document.getElementById('icon-larder').classList.add('active-icon')
+    document.getElementById('icon-recipes').classList.remove('active-icon')
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 function goToRecipes() {

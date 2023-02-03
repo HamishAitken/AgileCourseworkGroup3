@@ -103,13 +103,13 @@
       searchbar.addEventListener('keyup', function (event) {
         if (event.key === 'Enter' && searchbar.value != '') {
           const search = searchbar.value
-
-          fetch('/search', {
+          // TODO: what is this supposed to do?
+          fetch('/api/recipes/search_by_name', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ search }),
+            body: JSON.stringify({ search_value }),
           })
             .then((res) => res.json())
             .then((data) => {
@@ -118,43 +118,28 @@
         }
       })
 
-      fetch('/api/admin/recipes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token,
-        }),
-      })
-        .then((res) => {
-          const status_code = res.status
-
-          return res.json().then((response) => ({ status_code, response }))
-        })
-        .then((status_code, response) => {
-          const status = status_code.status_code
-          const recipes = status_code.response
-
-          if (status === 200) {
-            console.log(recipes)
+      fetch('/api/recipes')
+        .then((res) => res.json().then((response) => [res.status, response]))
+        .then(([status_code, response]) => {
+          if (status_code === 200) {
+            console.log(response)
             const recipe_container = document.getElementById('recipe-container')
             let innerdata = ''
             for (let i = 0; i < recipes.length; i++) {
               innerdata += `
-    <tr>
-      <td>${recipes[i].recipe}</td>
-      <td>...</td>
-      <td>....</td>
-      <td>
-        <button class="btn btn-primary">edit</button>
-      </td>
-      <td>
-        <button id="delete"class="btn btn-danger">Delete</button>
-      </td>
-    </tr>
-              
-    `
+      <tr>
+        <td>${recipes[i].recipe}</td>
+        <td>...</td>
+        <td>....</td>
+        <td>
+          <button class="btn btn-primary">edit</button>
+        </td>
+        <td>
+          <button id="delete"class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
+
+      `
             }
             recipe_container.innerHTML = innerdata
           } else {
