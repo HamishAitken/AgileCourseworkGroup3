@@ -107,7 +107,6 @@ function generateShoppingCart(){
         shopping_mobile.appendChild(par);
         return;
     }
-    console.log(cart.length);
     for(let i = 0;i<cart.length;i++){
         let li = document.createElement("li");
         li.classList.add("mb-2");
