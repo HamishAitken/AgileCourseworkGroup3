@@ -9,19 +9,18 @@ fetch('/api/recipes/')
     const recipe_instructions = document.getElementById('recipe_instructions')
     const recipe_ingredients = document.getElementById('recipe_ingredients')
 
-    for (element of data) {
-      if (element.id == id) {
+    for (const element of data) {
+      if (element.id === id) {
         const title = element.name
         const image = element.image
 
         const instructions = element.preparation_steps.replace(/\n/g, '</br>')
 
-        //parse ingredient and form an object
+        // parse ingredient and form an object
         const ingredients = element.ingredients
-        for (let ingredient of ingredients) {
+        for (const ingredient of ingredients) {
           recipe_ingredients.innerHTML += `
      <li>${ingredient.ingredient}</li>
-    
      `
         }
 
@@ -30,14 +29,12 @@ fetch('/api/recipes/')
          `
 
         recipe_image.innerHTML = `
-<img src="${image}" class="img-fluid" alt="...">
-`
+      <img src="${image}" class="img-fluid" alt="...">
+      `
 
         recipe_instructions.innerHTML = `
-<p id="markdown">${instructions}</p>
-
-
-`
+      <p id="markdown">${instructions}</p>
+      `
       }
     }
   })

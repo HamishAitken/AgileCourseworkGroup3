@@ -1,14 +1,14 @@
-var selectedItems = []
+const selectedItems = []
 
 function selectIngredient(clicked_id) {
   console.log(clicked_id)
   el = document.getElementById(clicked_id)
   console.log(el.style.color)
-  if (el.style.color == 'rgb(255, 255, 255)') {
+  if (el.style.color === 'rgb(255, 255, 255)') {
     el.style.color = '#655F58'
     el.style.backgroundColor = '#B6AEAE'
 
-    let index = selectedItems.indexOf(clicked_id)
+    const index = selectedItems.indexOf(clicked_id)
     if (index > -1) {
       selectedItems.splice(index, 1)
     }
@@ -49,7 +49,7 @@ function generateIngredients() {
 }
 */
 
-//just fetch some recipes may be limited to 10 recipes
+// just fetch some recipes may be limited to 10 recipes
 fetch('/api/recipes/')
   .then((res) => res.json())
   .then((data) => {
@@ -86,7 +86,7 @@ fetch('/api/recipes/')
     }
   })
 const search_recipes = document.getElementById('search_recipes')
-//search for recipes using title
+// search for recipes using title
 search_recipes.addEventListener('keyup', (e) => {
   if (e.key === 'Enter') {
     const search_value = search_recipes.value
@@ -137,7 +137,7 @@ search_recipes.addEventListener('keyup', (e) => {
   }
 })
 
-//fetch ingredients
+// fetch ingredients
 fetch('/api/ingredients/')
   .then((res) => res.json())
   .then((data) => {
@@ -164,7 +164,7 @@ fetch('/api/ingredients/')
           console.log('no value')
         }
         const id = this.getAttribute('value')
-        //find a recipe using ingredients
+        // find a recipe using ingredients
         fetch(`/api/recipes/${id}`)
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, data]) => {
@@ -198,7 +198,7 @@ fetch('/api/ingredients/')
     })
   })
 
-//search for ingredients
+// search for ingredients
 const search_ingredients = document.getElementById('search_ingredients')
 search_ingredients.addEventListener('keyup', (e) => {
   if (e.key === 'Enter') {
@@ -268,11 +268,10 @@ function generateRecipes() {
   document.getElementById('recipesCard').appendChild(row)
 }
 
-
 generateIngredients()
 */
 
-//generateIngredients();
+// generateIngredients();
 
 function goToLarder() {
   try {
