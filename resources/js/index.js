@@ -78,7 +78,9 @@ function removeFromShoppingCart(element){
     //Get the Text of the <p> Element of the List where the button was clicked.
     let text = element.previousElementSibling.innerText;
     var cart = JSON.parse(localStorage.getItem("cart"));
-    cart.remove(text);
+    let index = cart.indexOf(text);
+    if (index > -1) cart.splice(index, 1); 
+    element.parentElement.parentElement.remove();
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 /**
@@ -122,7 +124,7 @@ function generateShoppingCart(){
         button.setAttribute("data-toggle", "tooltip");
         button.setAttribute("data-placemen", "top");
         button.setAttribute("title", "Remove from shoppping-list");
-        button.setAttribute("onclick", "removeFromShopnpingCart(this)");
+        button.setAttribute("onclick", "removeFromShoppingCart(this)");
         button.innerText = "X";
 
         div.appendChild(p);
@@ -132,9 +134,9 @@ function generateShoppingCart(){
         ul.appendChild(li);
 
     }
-    console.log(ul);
     shopping_mobile.appendChild(ul);
-    shopping.appendChild(ul);
+    let ul_clone = ul.cloneNode(true);
+    shopping.appendChild(ul_clone);
 }
 
 
