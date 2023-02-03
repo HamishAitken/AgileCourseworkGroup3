@@ -146,7 +146,7 @@ body{
 	fill: #329E62;
 }
 
-#collapseShoppingCart div{
+#collapseShoppingCart .div-collapse{
   position: fixed;
   height: 100vh;
   width: 200px;

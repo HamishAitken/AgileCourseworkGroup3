@@ -14,7 +14,6 @@ function generateIngredients(){
             ingredient.innerText = ingredients[j];
             ingredient.setAttribute("onclick", "selectIngredient(this.id)");
             elGroup.appendChild(ingredient);   
-            console.log(ingredient);
         }
     }  
 }
@@ -75,6 +74,71 @@ function generateRecipes(){
 generateRecipes();
 generateIngredients();
 
+function removeFromShoppingCart(element){
+    //Get the Text of the <p> Element of the List where the button was clicked.
+    let text = element.previousElementSibling.innerText;
+    var cart = JSON.parse(localStorage.getItem("cart"));
+    cart.remove(text);
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+/**
+ * Generates the shopping cart html in following format:
+ * <li class="mb-2">
+        <div class="d-flex flex-row flex-row-table align-content-start ">
+            <p class="mb-1 align-self-center"><<INGREDIENT>></p>
+            <button type="button" onclick="removeFromShopnpingCart(this)" class="btn btn-outline-success ms-auto p-2" data-toggle="tooltip" data-placement="top" title="Add to Shopping List"></button>
+        </div>
+   </li>
+ */
+
+function generateShoppingCart(){
+    var shopping = document.getElementById("shopping-list");
+    var shopping_mobile = document.getElementById("shopping-list-mobile");
+    var ul = document.createElement("ul");
+    var cart = JSON.parse(localStorage.getItem("cart"));
+    if(cart == null){
+        let par = document.createElement("p");
+        par.innerText = "The Shopping-list appears to be empty";
+        par.classList.add("ms-4");
+        shopping.appendChild(par);
+        shopping_mobile.appendChild(par);
+        return;
+    }
+    console.log(cart.length);
+    for(let i = 0;i<cart.length;i++){
+        let li = document.createElement("li");
+        li.classList.add("mb-2");
+        
+        let div = document.createElement("div");
+        div.classList.add("d-flex","flex-row", "flex-row-table",  "align-content-start");
+        
+        let p = document.createElement("p");
+        p.classList.add("mb-1", "align-self-center");
+        p.innerText = cart[i];
+
+        let button = document.createElement("button");
+        button.classList.add("btn", "btn-outline-danger", "ms-auto", "p-2");
+        button.setAttribute("type", "button");
+        button.setAttribute("data-toggle", "tooltip");
+        button.setAttribute("data-placemen", "top");
+        button.setAttribute("title", "Remove from shoppping-list");
+        button.setAttribute("onclick", "removeFromShopnpingCart(this)");
+        button.innerText = "X";
+
+        div.appendChild(p);
+        div.appendChild(button);
+
+        li.appendChild(div);
+        ul.appendChild(li);
+
+    }
+    console.log(ul);
+    shopping_mobile.appendChild(ul);
+    shopping.appendChild(ul);
+}
+
+
+generateShoppingCart();
 function goToLarder(){
     try{
         document.getElementById("larder").classList.remove("d-none");
@@ -123,5 +187,13 @@ function goToShoppingList(){
         console.log(error);
     }
     
+}
+
+const queryString = window.location.search;
+if(queryString.split("?").length>1){
+    site = queryString.split("?")[1].split("=")[1];
+    if(site == "larder") goToLarder();
+    else if(site == "recipes") goToRecipes();
+    else if(site == "cart") goToShoppingList();
 }
 
