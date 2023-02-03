@@ -3,7 +3,7 @@ const { withJWTRole } = require('../utils/middlewares.js')
 
 const ingredientRouter = require('express').Router()
 
-var ingredientsCollection = db.getCollection('ingredients')
+let ingredientsCollection = db.getCollection('ingredients')
 db.on('loaded', () => (ingredientsCollection = db.getCollection('ingredients')))
 
 const ingredientDocumentToJson = (ingredient) => {
@@ -40,6 +40,8 @@ ingredientRouter.get('/:id', (req, res) => {
 
 ingredientRouter.post('/search_by_name', (req, res) => {
   const input = req.body.search_term
+
+  if (!search || search.length < 3) return res.status(400).json({ error: 'Invalid search query' })
 
   const regex = new RegExp(input, 'i')
   const matchingIngredients = ingredientsCollection.where((ingredient) => regex.test(ingredient.name))

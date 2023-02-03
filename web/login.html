@@ -20,7 +20,7 @@
               <div class="row g-0">
                 <div class="col-md-6 col-lg-5 d-none d-md-block" style="height: 550px; overflow: hidden">
                   <img
-                    src="/assets/TLGL3.jpg"
+                    src="/resources/img/TLGL3.jpg"
                     alt="login form"
                     class="img-fluid"
                     style="border-radius: 1rem 0 0 1rem; height: inherit"
@@ -70,31 +70,18 @@
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
 
-        const login = {
-          username: username,
-          password: password,
-        }
-
         fetch('/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            login,
-          }),
+          body: JSON.stringify({ username, password }),
         })
-          .then((res) => {
-            const status_code = res.status
+          .then((res) => res.json().then((response) => [res.status, response]))
+          .then(([status_code, response]) => {
+            const token = response.token
 
-            return res.json().then((response) => ({ status_code, response }))
-          })
-
-          .then((status_code, response) => {
-            const status = status_code.status_code
-            const token = status_code.response
-
-            if (status === 200) {
+            if (status_code === 200) {
               localStorage.setItem('token', JSON.stringify(token))
               window.location = '/admin.html'
             } else if (status === 401) {

@@ -120,27 +120,27 @@
 
       fetch('/api/recipes')
         .then((res) => res.json().then((response) => [res.status, response]))
-        .then(([status_code, response]) => {
+        .then(([status_code, recipes]) => {
           if (status_code === 200) {
-            console.log(response)
             const recipe_container = document.getElementById('recipe-container')
             let innerdata = ''
-            for (let i = 0; i < recipes.length; i++) {
-              innerdata += `
-      <tr>
-        <td>${recipes[i].recipe}</td>
-        <td>...</td>
-        <td>....</td>
-        <td>
-          <button class="btn btn-primary">edit</button>
-        </td>
-        <td>
-          <button id="delete"class="btn btn-danger">Delete</button>
-        </td>
-      </tr>
 
-      `
-            }
+            recipes.forEach((recipe) => {
+              // TODO: actual recipe list
+              innerdata += `
+        <tr>
+          <td>${recipe}</td>
+          <td>...</td>
+          <td>....</td>
+          <td>
+            <button class="btn btn-primary">edit</button>
+          </td>
+          <td>
+            <button id="delete"class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+        `
+            })
             recipe_container.innerHTML = innerdata
           } else {
             console.log('error')

@@ -3,7 +3,7 @@ const { withJWTRole } = require('../utils/middlewares.js')
 
 const recipeRouter = require('express').Router()
 
-var recipesCollection = db.getCollection('recipes')
+let recipesCollection = db.getCollection('recipes')
 db.on('loaded', () => (recipesCollection = db.getCollection('recipes')))
 
 const recipeDocumentToJson = (recipe) => {
@@ -43,7 +43,7 @@ recipeRouter.get('/:id', (req, res) => {
 
 recipeRouter.post('/search_by_name', (req, res) => {
   const search = req.body.search_value
-  if (!search || search.length() < 3) res.status(400).json({ error: 'Invalid search query' })
+  if (!search || search.length < 3) return res.status(400).json({ error: 'Invalid search query' })
   const regex = new RegExp(search, 'i')
 
   const matchingRecipes = recipesCollection.where((recipe) => regex.test(recipe.name))
