@@ -18,9 +18,9 @@ function generateIngredients(){
     }  
 }
 
-function generateRecipes(){
+function generateRecipes(recipesInput){
     //API Call to retrieve those here
-    let recipes = ["Stir Fry", "Sweet Chili", "Caesar Salad", "Pizza Funghi"];
+    let recipes = recipesInput;
     var row;
     for(let i = 0;i<recipes.length;i++){
         if(i%2 == 0){
@@ -68,10 +68,9 @@ function generateRecipes(){
     document.getElementById("recipesCard").appendChild(row);
 }
 
-
-
-
-generateRecipes();
+getInitialRecipes().then(initialRecipes => {
+    generateRecipes(initialRecipes)
+  })
 generateIngredients();
 
 function removeFromShoppingCart(element){
@@ -199,3 +198,78 @@ if(queryString.split("?").length>1){
     else if(site == "cart") goToShoppingList();
 }
 
+async function getInitialRecipes() {
+    const recData = await fetch('recipes.json').then((res) => res.json())
+    const collectedRecipes = recData.data.recipes.slice()
+    const recipeNames = collectedRecipes.map(recipe => recipe.name)
+    return recipeNames
+}
+
+
+async function getRecipes() {
+    // const recipeContainer = document.getElementById('recipesCard')
+    // recipeContainer.innerHTML = " "
+
+    // let searchTerm = document.getElementById('formIngredients').value
+    
+  
+    
+  
+    // //read json file and parse
+    // // TODO: handle missing file
+    // const ingData = await fetch('ingredients.json').then((res) => res.json())
+  
+    // const searchResults = ingData.data.ingredients.filter((ingredient) => ingredient.name === searchTerm)
+  
+    // // TODO: handle missing file
+    // const recData = await fetch('recipes.json').then((res) => res.json())
+  
+    // // TODO: dropdown to allow user to select the ingredient (instead of using the first one)
+    // // TODO: handle not finding any ingredients
+    // const ingID = searchResults[0].id
+  
+    // // TODO: handle not finding any recipes (show a message?)
+    // const collectedRecipes = recData.data.recipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === ingID))
+  
+    
+  
+    // const recipeNames = collectedRecipes.map(recipe => recipe.name)
+    // generateRecipes(recipeNames)
+  
+    
+    const recipeContainer = document.getElementById('recipesCard')
+  recipeContainer.innerHTML = " "
+
+  let searchTerms = document.getElementById('formIngredients').value.split(',')
+
+  //read json file and parse
+  const ingData = await fetch('ingredients.json').then((res) => res.json())
+
+  // Filter the ingredients data to only contain the ones that match the search terms
+  let allSearchResults = []
+  for (let term of searchTerms) {
+    let searchResults = ingData.data.ingredients.filter((ingredient) => ingredient.name === term.trim())
+    allSearchResults.push(searchResults)
+  }
+
+  // TODO: handle missing file
+  const recData = await fetch('recipes.json').then((res) => res.json())
+
+  let collectedRecipes = recData.data.recipes
+  for (let resultArray of allSearchResults) {
+    for (let result of resultArray) {
+      collectedRecipes = collectedRecipes.filter((recipe) => recipe.ingredients.find((ing) => ing.id === result.id))
+    }
+  }
+
+  if (!allSearchResults.flat().length) {
+    recipeContainer.innerHTML = "No ingredients found matching the search terms."
+  } else if (!collectedRecipes.length) {
+    recipeContainer.innerHTML = "No recipes found using the ingredients."
+  } else {
+    const recipeNames = collectedRecipes.map(recipe => recipe.name)
+    generateRecipes(recipeNames)
+  }
+    
+    
+  }
