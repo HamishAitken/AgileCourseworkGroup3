@@ -19,6 +19,7 @@ const recipeDocumentToJson = (recipe) => {
 recipeRouter.post('/', withJWTRole('admin'), (req, res) => {
   // TODO: validation. even though only authorized users can add recipes, we should probably still do some checks
   const body = req.body
+
   const recipe = recipesCollection.insert({
     name: body.name,
     image: body.image,
@@ -38,6 +39,23 @@ recipeRouter.get('/:id', (req, res) => {
     res.status(404).json({ error: 'Recipe not found' })
   } else {
     res.json(recipeDocumentToJson(recipe))
+  }
+})
+
+recipeRouter.post('/search_by_ingredients', (req, res) => {
+  const search = req.body.search_value
+  if (!search || search.length === 0) return res.status(400).json({ error: 'Invalid search query' })
+
+  const matchingRecipes = recipesCollection
+    .chain()
+    .find({ 'ingredients.length': { $lte: search.length } })
+    .where((recipe) => recipe.ingredients.every((ingr) => search.includes(ingr.id)))
+    .data()
+
+  if (matchingRecipes.length === 0) {
+    res.status(404).json({ error: 'No recipes found' })
+  } else {
+    res.json(matchingRecipes.map(recipeDocumentToJson))
   }
 })
 

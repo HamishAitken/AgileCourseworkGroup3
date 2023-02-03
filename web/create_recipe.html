@@ -81,22 +81,20 @@
         const instructions = document.getElementById('instructions').value
 
         const recipe = {
-          recipe: recipe_name,
+          name: recipe_name,
           image: url,
-          ingredients: ingredients,
-          instructions: instructions,
+          // TODO: this should be an array of ingredient IDs
+          ingredients: [],
+          preparation_steps: instructions,
         }
 
-        fetch('/api/admin/create_recipe', {
+        fetch('/api/recipes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          // TODO: fix this, wrong JSON format
-          body: JSON.stringify({
-            recipe,
-          }),
+          body: JSON.stringify(recipe),
         })
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, response]) => {
