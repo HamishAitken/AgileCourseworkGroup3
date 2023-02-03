@@ -88,13 +88,9 @@ function generateRecipes(recipesInput){
     document.getElementById("recipesCard").appendChild(row);
 }
 
-
-
 getInitialRecipes().then(initialRecipes => {
     generateRecipes(initialRecipes)
   })
-
-
 generateIngredients();
 
 function goToLarder(){
@@ -123,9 +119,6 @@ function goToRecipes(){
     }
     
 }
-
-
-
 
 
 async function getInitialRecipes() {
@@ -203,4 +196,3 @@ async function getRecipes() {
     
     
   }
-  
