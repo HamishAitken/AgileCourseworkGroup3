@@ -1,3 +1,4 @@
+
 var selectedItems = []
 
 function selectIngredient(clicked_id) {
@@ -20,7 +21,7 @@ function selectIngredient(clicked_id) {
     console.log(selectedItems)
   }
 }
-
+/*
 function generateIngredients() {
   let groups = ['bakingGoods', 'nuts']
   for (let i = 0; i < groups.length; i++) {
@@ -47,31 +48,36 @@ function generateIngredients() {
     }
   }
 }
+*/
 
-fetch('/api/admin/get_recipes', {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-  .then((res) => res.json())
-  .then((data) => {
-    const recipe_card = document.getElementById('recipesCard')
-    let recipeHTML = ''
-    for (const element of data) {
-      //FIXME: element will never have $loki in it
-      const id = element.$loki
-
-      recipeHTML += `
+//just fetch some recipes may be limited to 10 recipes 
+fetch('/api/recipes/',{
+    method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((res) =>res.json())
+        .then((data)=>{
+   
+            const recipe_card=document.getElementById('recipesCard');
+            let recipeHTML='';
+            for(const element of data){
+       
+                const id=element.id;
+                
+               recipeHTML +=`
 
               <a href="/details_page.html?id=${id}">
-               <div class="col ">
+               <div class="col h-100">
               <div class="card" style="border-radius:7px;">
               <div class="card-body shadow">
-              <h5 class="card-title text-cente color-text-brownish">${element.recipe}</h5>
+              <h5 class="card-title text-cente color-text-brownish">${element.name}</h5>
               <img id="image" src="${element.image}" alt="${element.title}" class="card-img-top" 
               style="border-radius:10px; 
-              height=200px;"
+            height:200px;
+              object-fit: cover;
+              object-position: center;
+              "
               >
               </div>
               </div>
@@ -86,7 +92,179 @@ fetch('/api/admin/get_recipes', {
       image.src = 'https://www.floatex.com/wp-content/uploads/2016/04/dummy-post-horisontal.jpg'
     }
   })
+//search for recipes using title
+const search = document.getElementById('search_recipes')
 
+search.addEventListener('keyup', (e) => {
+    if(e.key==="Enter"){
+    const search_value=document.getElementById('search_recipes').value;
+  document.getElementById('search_recipes').value = '';
+
+    fetch('/api/recipes/search_recipes',{
+
+    method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+           search_value
+          }),
+        })
+          .then((res) => {
+            const status = res.status;
+             return res.json().then((response) => ({ status, response }))
+          })
+          
+            .then((status,response) => {
+                const status_code=status.status;
+                const data=status.response;
+                if(status_code===200){
+                    console.log(data);
+                    const recipe_card=document.getElementById('recipesCard');
+                  
+                    let recipeHTML='';
+                for(const element of data){
+                 recipeHTML +=`
+                    <a href="/details_page.html?id=${element.id}">
+                    <div class="col h-100">
+                    <div class="card" style="border-radius:7px;">
+                    <div class="card-body shadow">
+                    <div class="card-title">${element.name}</div>
+                    <img id="image" src="${element.image}" alt="${element.title}" class="card-img-top"
+                    style="border-radius:10px;
+                    height:200px;
+                    object-fit: cover;
+                    object-position: center;
+                    ">
+                    </div>
+                    </div>
+                    </div>
+                    </a>
+
+                 
+                 `;
+                    recipe_card.innerHTML = recipeHTML;
+
+                }
+                  
+                }
+                else{
+                   
+                    alert('Error 404:no recipe found');
+                
+                }
+            })
+    
+
+    }
+});
+
+  //fetch ingredients
+
+    fetch('/api/ingredients/',{
+    method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((res) =>res.json())
+        .then((data) => {
+            const elements = data;
+            const ingredientContainer = document.getElementById('ingredients_container');
+            let ingredientHTML = '';
+            for (let i = 0; i < elements.length; i++) {
+              if (i < 10) {
+                const id = elements[i].id;
+                const name = elements[i].name;
+                const image = elements[i].image;
+          
+                ingredientHTML += `
+                  <p class="element-flex ing_id" value="${id}">${name}</p>
+                `;
+              }
+            }
+            ingredientContainer.innerHTML = ingredientHTML;
+          
+            const ingIdElements = document.querySelectorAll('.ing_id');
+            ingIdElements.forEach((ingIdElement) => {
+              ingIdElement.addEventListener('click', function() {
+                if (!this.getAttribute('value')) {
+             console.log('no value')
+                }
+                const id = this.getAttribute('value');
+                //find a recipe using ingredients
+              fetch('/api/recipes/id',{
+                method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body:JSON.stringify({
+                            id
+                            })
+                        
+                        })
+                        .then((res) => {
+                            const status = res.status;
+                            return res.json().then((response) => ({ status, response }))
+                        }
+                        )
+                        .then((status, response) => {
+                            const status_code = status.status;
+                            const data = status.response;
+                            if (status_code === 200) {
+                                console.log(data);
+                                const recipe_card = document.getElementById('recipesCard');
+                                let recipeHTML = '';
+                                for (const element of data) {
+                                    recipeHTML += `
+                    <a href="/details_page.html?id=${element.id}">
+                    <div class="col h-100">
+                    <div class="card" style="border-radius:7px;">
+                    <div class="card-body shadow">
+                    <div class="card-title">${element.name}</div>
+                    <img id="image" src="${element.image}" alt="${element.title}" class="card-img-top"
+                    style="border-radius:10px;
+                    height:200px;
+                    object-fit: cover;
+                    object-position: center;
+                    ">
+                    </div>
+                    </div>
+                    </div>
+                    </a>
+                    `;
+                                    recipe_card.innerHTML = recipeHTML;
+            }
+            }                  
+              })
+              });
+            });
+          });
+
+
+  //search for ingredients
+    const search_ingredients = document.getElementById('search_ingredients');
+    search_ingredients.addEventListener('keyup', (e) => {
+        if(e.key==="Enter"){
+        const search_term = search_ingredients.value;
+        document.getElementById('search_ingredients').value = '';
+        fetch('/api/ingredients/search_ingredients', {
+            method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            search_term
+            }),
+        
+        }).then((res) => res.json())
+        .then((data) => {
+console.log(data)
+
+        })
+        }})
+
+       
+/*
 function generateRecipes() {
   //API Call to retrieve those here
   let recipes = ['Stir Fry', 'Sweet Chili', 'Caesar Salad', 'Pizza Funghi']
@@ -134,20 +312,25 @@ function generateRecipes() {
   document.getElementById('recipesCard').appendChild(row)
 }
 
-generateRecipes()
-generateIngredients()
 
-function goToLarder() {
-  try {
-    document.getElementById('larder').classList.remove('d-none')
-    document.getElementById('larder').classList.remove('d-sm-block')
-    document.getElementById('recipes').classList.add('d-none')
-    document.getElementById('recipes').classList.add('d-sm-block')
-    document.getElementById('icon-larder').classList.add('active-icon')
-    document.getElementById('icon-recipes').classList.remove('active-icon')
-  } catch (error) {
-    console.log(error)
-  }
+generateIngredients()
+*/
+
+
+
+//generateIngredients();
+
+function goToLarder(){
+    try{
+        document.getElementById("larder").classList.remove("d-none");
+        document.getElementById("larder").classList.remove("d-sm-block");
+        document.getElementById("recipes").classList.add("d-none");
+        document.getElementById("recipes").classList.add("d-sm-block");
+        document.getElementById("icon-larder").classList.add("active-icon");
+        document.getElementById("icon-recipes").classList.remove("active-icon");
+    }catch(error){
+        console.log(error);
+    }
 }
 
 function goToRecipes() {

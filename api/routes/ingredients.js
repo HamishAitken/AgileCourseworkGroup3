@@ -32,10 +32,18 @@ ingredientRouter.get('/', (_, res) => {
   res.json(ingredientsCollection.data.map(ingredientDocumentToJson))
 })
 
-ingredientRouter.get('/:id', (req, res) => {
-  const ingredient = ingredientsCollection.get(req.params.id)
-  if (!ingredient) return res.status(404).json({ error: 'Ingredient not found' })
-  res.json(ingredientDocumentToJson(ingredient))
+ingredientRouter.post('/search_ingredients', (req, res) => {
+ const input=req.body.search_term;
+ 
+  const regex = new RegExp(input, "i");
+  const matchingIngredients = ingredientsCollection.data.filter((ingredient) => regex.test(ingredient.name));
+ 
+  if(matchingIngredients.length===0){
+    res.status(404).json({ error: 'No ingredients found' })
+  }else{
+    res.json(matchingIngredients.map(ingredientDocumentToJson));
+    }
+
 })
 
 module.exports = ingredientRouter
