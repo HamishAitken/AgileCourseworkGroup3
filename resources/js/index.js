@@ -82,6 +82,7 @@ function removeFromShoppingCart(element){
     element.parentElement.parentElement.remove();
     localStorage.setItem("cart", JSON.stringify(cart));
 }
+
 /**
  * Generates the shopping cart html in following format:
  * <li class="mb-2">
@@ -91,7 +92,6 @@ function removeFromShoppingCart(element){
         </div>
    </li>
  */
-
 function generateShoppingCart(){
     var shopping = document.getElementById("shopping-list");
     var shopping_mobile = document.getElementById("shopping-list-mobile");
