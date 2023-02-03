@@ -94,66 +94,7 @@
       </div>
     </div>
 
-    <script>
-      const token = JSON.parse(localStorage.getItem('token'))
-      if (!token) {
-        window.location.href = '/login.html'
-      }
-      const searchbar = document.getElementById('search_bar')
-      searchbar.addEventListener('keyup', function (event) {
-        if (event.key === 'Enter' && searchbar.value != '') {
-          const search = searchbar.value
-          // TODO: what is this supposed to do?
-          fetch('/api/recipes/search_by_name', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ search_value }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log(data)
-            })
-        }
-      })
-
-      fetch('/api/recipes/')
-        .then((res) => res.json().then((response) => [res.status, response]))
-        .then(([status_code, recipes]) => {
-          if (status_code === 200) {
-            const recipe_container = document.getElementById('recipe-container')
-            let innerdata = ''
-
-            recipes.forEach((recipe) => {
-              // TODO: actual recipe list
-
-              const recipe_name=recipe.name
-              innerdata += `
-        <tr>
-          <td>${recipe_name}</td>
-          <td>...</td>
-          <td>....</td>
-          <td>
-            <button class="btn btn-primary">edit</button>
-          </td>
-          <td>
-            <button id="delete"class="btn btn-danger">Delete</button>
-          </td>
-        </tr>
-        `
-            })
-            recipe_container.innerHTML = innerdata
-          } else {
-            console.log('error')
-          }
-        })
-
-
-        function edit(){
-          
-        }
-    </script>
+    
     <!--display all recipes-->
     <div class="container">
       <div class="row">
@@ -168,8 +109,6 @@
             <thead>
               <tr>
                 <th>Recipe Name</th>
-                <th>Ingredients</th>
-                <th>Image</th>
                 <th>edit</th>
                 <th>delete</th>
               </tr>
@@ -186,5 +125,7 @@
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
+    <script src="/resources/js/admin.js"></script>
+   
   </body>
 </html>

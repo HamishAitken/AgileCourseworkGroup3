@@ -224,6 +224,8 @@ search_ingredients.addEventListener('keyup', (e) => {
           }
           ingredientContainer.innerHTML = ingredientHTML;
 
+          
+
 
         }
 
