@@ -118,7 +118,7 @@
         }
       })
 
-      fetch('/api/recipes')
+      fetch('/api/recipes/')
         .then((res) => res.json().then((response) => [res.status, response]))
         .then(([status_code, recipes]) => {
           if (status_code === 200) {
@@ -127,9 +127,11 @@
 
             recipes.forEach((recipe) => {
               // TODO: actual recipe list
+
+              const recipe_name=recipe.name
               innerdata += `
         <tr>
-          <td>${recipe}</td>
+          <td>${recipe_name}</td>
           <td>...</td>
           <td>....</td>
           <td>
@@ -146,6 +148,11 @@
             console.log('error')
           }
         })
+
+
+        function edit(){
+          
+        }
     </script>
     <!--display all recipes-->
     <div class="container">

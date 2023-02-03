@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search)
 const id = urlParams.get('id')
-console.log(id)
+
 fetch('/api/recipes/')
   .then((res) => res.json())
   .then((data) => {
@@ -9,27 +9,27 @@ fetch('/api/recipes/')
     const recipe_instructions = document.getElementById('recipe_instructions')
     const recipe_ingredients = document.getElementById('recipe_ingredients')
 
-    for (const element of data) {
-      if (element.id === id) {
-        const title = element.name
-        const image = element.image
+    for (let i=0;i<data.length;i++) {
+      
+      if ( data[i].id==id) {
+        console.log(data[i].id)
 
-        const instructions = element.preparation_steps.replace(/\n/g, '</br>')
+        const instructions = data[i].preparation_steps.replace(/\n/g, '</br>');
 
         // parse ingredient and form an object
-        const ingredients = element.ingredients
-        for (const ingredient of ingredients) {
+        const ingredients = data[i].ingredients;
+        for (let j=0;j<ingredients.length;j++) {
           recipe_ingredients.innerHTML += `
-     <li>${ingredient.ingredient}</li>
+     <li>${ingredients[j].ingredient}---${ingredients[j].id}</li>
      `
         }
 
         recipe_title.innerHTML += `
-         <h4 class="text-center">${title}</h4>
+         <h4 class="text-center">${data[i].name}</h4>
          `
 
         recipe_image.innerHTML = `
-      <img src="${image}" class="img-fluid" alt="...">
+      <img src="${data[i].image}" class="img-fluid" alt="...">
       `
 
         recipe_instructions.innerHTML = `

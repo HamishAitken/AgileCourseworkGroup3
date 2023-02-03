@@ -39,11 +39,11 @@ ingredientRouter.get('/:id', (req, res) => {
 })
 
 ingredientRouter.post('/search_by_name', (req, res) => {
-  const input = req.body.search_term
+  const search = req.body.search_term
 
   if (!search || search.length < 3) return res.status(400).json({ error: 'Invalid search query' })
 
-  const regex = new RegExp(input, 'i')
+  const regex = new RegExp(search, 'i')
   const matchingIngredients = ingredientsCollection.where((ingredient) => regex.test(ingredient.name))
 
   if (matchingIngredients.length === 0) {

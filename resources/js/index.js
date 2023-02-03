@@ -1,53 +1,4 @@
-const selectedItems = []
 
-function selectIngredient(clicked_id) {
-  console.log(clicked_id)
-  el = document.getElementById(clicked_id)
-  console.log(el.style.color)
-  if (el.style.color === 'rgb(255, 255, 255)') {
-    el.style.color = '#655F58'
-    el.style.backgroundColor = '#B6AEAE'
-
-    const index = selectedItems.indexOf(clicked_id)
-    if (index > -1) {
-      selectedItems.splice(index, 1)
-    }
-    console.log(selectedItems)
-  } else {
-    el.style.color = '#FFFFFF'
-    el.style.backgroundColor = '#329E62'
-    selectedItems.push(clicked_id)
-    console.log(selectedItems)
-  }
-}
-/*
-function generateIngredients() {
-  let groups = ['bakingGoods', 'nuts']
-  for (let i = 0; i < groups.length; i++) {
-    //API CALL GET INGREDIENTS
-    let ingredients = [
-      'Flour',
-      'Baking Soda',
-      'Whole Wheat Flour',
-      'Granulated Sugar',
-      'Brown Sugar',
-      'Cocoapowder',
-      'Wheat Flour',
-    ]
-    ingredients.push('more....')
-    let elGroup = document.getElementById(groups[i])
-    for (let j = 0; j < ingredients.length; j++) {
-      ingredient = document.createElement('p')
-      ingredient.classList.add('element-flex')
-      ingredient.setAttribute('id', ingredients[j])
-      ingredient.innerText = ingredients[j]
-      ingredient.setAttribute('onclick', 'selectIngredient(this.id)')
-      elGroup.appendChild(ingredient)
-      console.log(ingredient)
-    }
-  }
-}
-*/
 
 // just fetch some recipes may be limited to 10 recipes
 fetch('/api/recipes/')
@@ -86,7 +37,10 @@ fetch('/api/recipes/')
     }
   })
 const search_recipes = document.getElementById('search_recipes')
-// search for recipes using title
+/*
+search for recipes using the title of the recipe
+
+*/
 search_recipes.addEventListener('keyup', (e) => {
   if (e.key === 'Enter') {
     const search_value = search_recipes.value
@@ -145,10 +99,10 @@ fetch('/api/ingredients/')
     const ingredientContainer = document.getElementById('ingredients_container')
     let ingredientHTML = ''
     for (let i = 0; i < elements.length; i++) {
-      if (i < 10) {
+      if (i < 15) {
         const id = elements[i].id
         const name = elements[i].name
-        const image = elements[i].image
+       
 
         ingredientHTML += `
                   <p class="element-flex ing_id" value="${id}">${name}</p>
@@ -157,22 +111,50 @@ fetch('/api/ingredients/')
     }
     ingredientContainer.innerHTML = ingredientHTML
 
-    const ingIdElements = document.querySelectorAll('.ing_id')
+    let selectedIngredientIds = [];
+    const ingIdElements = document.querySelectorAll('.ing_id');
+
     ingIdElements.forEach((ingIdElement) => {
       ingIdElement.addEventListener('click', function () {
         if (!this.getAttribute('value')) {
-          console.log('no value')
+          alert('no value');
+          return;
         }
-        const id = this.getAttribute('value')
+       
+        const id = this.getAttribute('value');
+        const index = selectedIngredientIds.indexOf(id);
+        if (index === -1) {
+          selectedIngredientIds.push(id);
+          this.style.backgroundColor = 'green';
+        } else {
+          selectedIngredientIds.splice(index, 1);
+          this.style.backgroundColor = '';
+        }
+        //convert search ingredient to object?
+       let search_value=selectedIngredientIds.map(Number);
+       
+  
+
+        
         // find a recipe using ingredients
-        fetch(`/api/recipes/${id}`)
+        fetch(`/api/recipes/search_by_ingredients`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            search_value
+          }),
+        })
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, data]) => {
             if (status_code === 200) {
-              console.log(data)
+             
               const recipe_card = document.getElementById('recipesCard')
               let recipeHTML = ''
               for (const element of data) {
+                console.log(element)
                 recipeHTML += `
                     <a href="/details_page.html?id=${element.id}">
                     <div class="col h-100">
@@ -192,6 +174,10 @@ fetch('/api/ingredients/')
                     `
                 recipe_card.innerHTML = recipeHTML
               }
+             
+            }
+            else{
+                console.log('not found');
             }
           })
       })
@@ -213,88 +199,34 @@ search_ingredients.addEventListener('keyup', (e) => {
         search_term,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
+      .then((res) => {
+        const result=res.status;
+        return res.json().then((response) => [result, response])
       })
-  }
-})
+      .then(([result, response]) => {
+      
+        if (result===400) {
+          alert('invalid search query')
+        }
+        else if(result===404){
+          alert('No ingredients found');
+        }
+        else{
+          const data=response;
+          const ingredientContainer = document.getElementById('ingredients_container')
+          let ingredientHTML = '';
+          for (const element of data) {
+            const id = element.id
+            const name = element.name
+            ingredientHTML += `
+                  <p class="element-flex ing_id" value="${id}">${name}</p>
+                `
+          }
+          ingredientContainer.innerHTML = ingredientHTML;
 
-/*
-function generateRecipes() {
-  //API Call to retrieve those here
-  let recipes = ['Stir Fry', 'Sweet Chili', 'Caesar Salad', 'Pizza Funghi']
-  var row
-  for (let i = 0; i < recipes.length; i++) {
-    if (i % 2 == 0) {
-      if (i != 0) document.getElementById('recipesCard').appendChild(row)
-      row = document.createElement('div')
-      row.classList.add('row', 'row-cols-1', 'row-cols-md-2', 'g-5', 'mx-5')
-      //The first row has more margin at the top, then the rest
-      if (i == 0) row.classList.add('mt-5')
-      else row.classList.add('mt-2')
-      //The last row gets added an aditional Class, that adds a margin to the Last Card, so it does not overlap in the mobile version with the navbar
-      if (i + 2 >= recipes.length) {
-        row.classList.add('rows')
-      }
-    }
-    let col = document.createElement('div')
-    col.classList.add('col')
 
-    let card = document.createElement('div')
-    card.classList.add('card')
-    card.style.borderRadius = '7px'
+        }
 
-    let card_Body = document.createElement('div')
-    card_Body.classList.add('card-body', 'shadow')
-
-    let title = document.createElement('h5')
-    title.classList.add('card-title', 'text-center', 'color-text-brownish')
-    title.innerHTML = '<b>' + recipes[i] + '</b>'
-    card_Body.appendChild(title)
-
-    let img = document.createElement('img')
-    img.classList.add('card-img-top')
-    img.style.borderRadius = '10px'
-    img.setAttribute('alt', recipes[i])
-    img.setAttribute('src', 'https://picsum.photos/300/200')
-    img.setAttribute('height', '200px')
-
-    card.appendChild(card_Body)
-    card.appendChild(img)
-    col.appendChild(card)
-    row.appendChild(col)
-  }
-  document.getElementById('recipesCard').appendChild(row)
-}
-
-generateIngredients()
-*/
-
-// generateIngredients();
-
-function goToLarder() {
-  try {
-    document.getElementById('larder').classList.remove('d-none')
-    document.getElementById('larder').classList.remove('d-sm-block')
-    document.getElementById('recipes').classList.add('d-none')
-    document.getElementById('recipes').classList.add('d-sm-block')
-    document.getElementById('icon-larder').classList.add('active-icon')
-    document.getElementById('icon-recipes').classList.remove('active-icon')
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-function goToRecipes() {
-  try {
-    document.getElementById('recipes').classList.remove('d-none')
-    document.getElementById('recipes').classList.remove('d-sm-block')
-    document.getElementById('larder').classList.add('d-none')
-    document.getElementById('larder').classList.add('d-sm-block')
-    document.getElementById('icon-larder').classList.remove('active-icon')
-    document.getElementById('icon-recipes').classList.add('active-icon')
-  } catch (error) {
-    console.log(error)
-  }
-}
+      })
+      
+    }})
