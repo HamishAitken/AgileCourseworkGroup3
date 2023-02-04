@@ -48,8 +48,9 @@ app.get('/api', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body
-  if (!username || username.length === 0 || !password || password.length === 0)
+  if (!username || username.length === 0 || !password || password.length === 0) {
     return res.status(400).json({ error: 'Invalid request' })
+  }
 
   const user = db.getCollection('users').findOne((user) => user.username === username)
   if (!user) {

@@ -90,7 +90,7 @@ fetch('/api/ingredients/')
     }
     ingredientContainer.innerHTML = ingredientHTML
 
-    let selectedIngredientIds = []
+    const selectedIngredientIds = []
     const ingIdElements = document.querySelectorAll('.ing_id')
 
     ingIdElements.forEach((ingIdElement) => {
@@ -112,11 +112,11 @@ fetch('/api/ingredients/')
         }
 
         // convert search ingredient to object?
-        let search_value = selectedIngredientIds.map((id) => parseInt(id))
+        const search_value = selectedIngredientIds.map((id) => parseInt(id))
 
         // TODO: extract to a function. add click handler for "search" button which uses this
         // find a recipe using ingredients
-        fetch(`/api/recipes/search_by_ingredients`, {
+        fetch('/api/recipes/search_by_ingredients', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -184,15 +184,15 @@ search_ingredients.addEventListener('keyup', (e) => {
 })
 
 function removeFromShoppingCart(element) {
-  //Get the Text of the <p> Element of the List where the button was clicked.
-  let text = element.previousElementSibling.innerText
-  var cart = JSON.parse(localStorage.getItem('cart'))
-  let index = cart.indexOf(text)
+  // Get the Text of the <p> Element of the List where the button was clicked.
+  const text = element.previousElementSibling.innerText
+  const cart = JSON.parse(localStorage.getItem('cart'))
+  const index = cart.indexOf(text)
   if (index > -1) cart.splice(index, 1)
 
   element.parentElement.parentElement.remove()
   localStorage.setItem('cart', JSON.stringify(cart))
-  if (cart.length == 0) localStorage.removeItem('cart')
+  if (cart.length === 0) localStorage.removeItem('cart')
 }
 
 /**
@@ -205,12 +205,12 @@ function removeFromShoppingCart(element) {
    </li>
  */
 function generateShoppingCart() {
-  var shopping = document.getElementById('shopping-list')
-  var shopping_mobile = document.getElementById('shopping-list-mobile')
-  var ul = document.createElement('ul')
-  var cart = JSON.parse(localStorage.getItem('cart'))
+  const shopping = document.getElementById('shopping-list')
+  const shopping_mobile = document.getElementById('shopping-list-mobile')
+  const ul = document.createElement('ul')
+  const cart = JSON.parse(localStorage.getItem('cart'))
   if (cart === null || cart.legnth === 0) {
-    let par = document.createElement('p')
+    const par = document.createElement('p')
     par.innerText = 'The Shopping-list appears to be empty'
     par.classList.add('ms-4')
     shopping.appendChild(par)
@@ -218,17 +218,17 @@ function generateShoppingCart() {
     return
   }
   for (let i = 0; i < cart.length; i++) {
-    let li = document.createElement('li')
+    const li = document.createElement('li')
     li.classList.add('mb-2')
 
-    let div = document.createElement('div')
+    const div = document.createElement('div')
     div.classList.add('d-flex', 'flex-row', 'flex-row-table', 'align-content-start')
 
-    let p = document.createElement('p')
+    const p = document.createElement('p')
     p.classList.add('mb-1', 'align-self-center')
     p.innerText = cart[i]
 
-    let button = document.createElement('button')
+    const button = document.createElement('button')
     button.classList.add('btn', 'btn-outline-danger', 'ms-auto', 'p-2')
     button.setAttribute('type', 'button')
     button.setAttribute('data-toggle', 'tooltip')
@@ -244,7 +244,7 @@ function generateShoppingCart() {
     ul.appendChild(li)
   }
   shopping_mobile.appendChild(ul)
-  let ul_clone = ul.cloneNode(true)
+  const ul_clone = ul.cloneNode(true)
   shopping.appendChild(ul_clone)
 }
 generateShoppingCart()
@@ -299,8 +299,8 @@ function goToShoppingList() {
 
 const queryString = window.location.search
 if (queryString.split('?').length > 1) {
-  site = queryString.split('?')[1].split('=')[1]
-  if (site == 'larder') goToLarder()
-  else if (site == 'recipes') goToRecipes()
-  else if (site == 'cart') goToShoppingList()
+  const site = queryString.split('?')[1].split('=')[1]
+  if (site === 'larder') goToLarder()
+  else if (site === 'recipes') goToRecipes()
+  else if (site === 'cart') goToShoppingList()
 }

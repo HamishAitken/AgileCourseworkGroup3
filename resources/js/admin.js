@@ -1,28 +1,28 @@
-//fetch all recipes
+// fetch all recipes
 const token = JSON.parse(localStorage.getItem('token'))
-  if (!token) {
-    window.location.href = '/login.html'
-  }
-  const searchbar = document.getElementById('search_bar')
-  searchbar.addEventListener('keyup', function (event) {
-    if (event.key === 'Enter' && searchbar.value != '') {
-      const search = searchbar.value
-      // TODO: what is this supposed to do?
-      fetch('/api/recipes/search_by_name', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ search_value }),
+if (!token) {
+  window.location.href = '/login.html'
+}
+const searchbar = document.getElementById('search_bar')
+searchbar.addEventListener('keyup', function (event) {
+  if (event.key === 'Enter' && searchbar.value !== '') {
+    const search_value = searchbar.value
+    // TODO: what is this supposed to do?
+    fetch('/api/recipes/search_by_name', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ search_value }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data)
-        })
-    }
-  })
+  }
+})
 
-  fetch('/api/recipes/')
+fetch('/api/recipes/')
   .then((res) => res.json().then((response) => [res.status, response]))
   .then(([status_code, recipes]) => {
     if (status_code === 200) {
@@ -32,7 +32,7 @@ const token = JSON.parse(localStorage.getItem('token'))
       recipes.forEach((recipe) => {
         // TODO: actual recipe list
 
-        const recipe_name = recipe.name;
+        const recipe_name = recipe.name
 
         innerdata += `
 <tr>
@@ -49,46 +49,42 @@ const token = JSON.parse(localStorage.getItem('token'))
       })
 
       recipe_container.innerHTML = innerdata
-      const editButtons = document.querySelectorAll('#edit');
+      const editButtons = document.querySelectorAll('#edit')
 
       for (let i = 0; i < editButtons.length; i++) {
-        editButtons[i].addEventListener('click', editRecipe);
+        editButtons[i].addEventListener('click', editRecipe)
       }
     } else {
       console.log('error')
     }
   })
 
-//fetch specific recipe to edit
+// fetch specific recipe to edit
 function editRecipe(event) {
-  const search_value= event.target.value;
-
+  const search_value = event.target.value
 
   fetch('/api/recipes/search_by_name', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-        search_value
-    })
-  }).then(res => res.json())
-  .then(data => {
+      search_value,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      const recipe_name = data[0].name
+      const recipe_image = data[0].image
+      const recipe_ingredients = data[0].ingredients
+      console.log(recipe_ingredients)
+      const ingredient_name = displayingredients(recipe_ingredients)
+      console.log(ingredient_name)
+      const recipe_preparation_steps = data[0].preparation_steps
 
-    const recipe_name = data[0].name;
-    const recipe_image = data[0].image;
-    const recipe_ingredients = data[0].ingredients;
-console.log(recipe_ingredients);
-    const ingredient_name=displayingredients(recipe_ingredients);
-    console.log(ingredient_name);
-    const recipe_preparation_steps = data[0].preparation_steps
+      const editor = document.createElement('editor')
 
-
-
-const editor=document.createElement('editor');
-
-
-editor.innerHTML+=`
+      editor.innerHTML += `
 <div class="modal" id="editor">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -125,68 +121,51 @@ editor.innerHTML+=`
 </div>
 `
 
-document.body.appendChild(editor);
-const editorModal = document.getElementById('editor');
-editorModal.classList.add('show');
-editorModal.style.display='block';
+      document.body.appendChild(editor)
+      const editorModal = document.getElementById('editor')
+      editorModal.classList.add('show')
+      editorModal.style.display = 'block'
 
-window.onclick = function(event) {
-    if (event.target == editorModal) {
-     editorModal.style.display = 'none';
-    }
-  }
-document.querySelector('close').addEventListener('click',function(){
-    editorModal.style.display = 'none';
-})
-  span.onclick = function() {
-  editorModal.style.display = 'none';
-  }
+      window.onclick = function (event) {
+        if (event.target === editorModal) {
+          editorModal.style.display = 'none'
+        }
+      }
+      document.querySelector('close').addEventListener('click', function () {
+        editorModal.style.display = 'none'
+      })
+      span.onclick = function () {
+        editorModal.style.display = 'none'
+      }
 
-    const saveButton = document.querySelector('save');
-    saveButton.addEventListener('click',function(){
-        const name = document.getElementById('name').value;
-        const image = document.getElementById('image').value;
-        const ingredients = document.getElementById('ingredients').value;
-        const preparation_steps = document.getElementById('preparation_steps').value;
- const recipeobj={
-            name,
-            image,
-            ingredients,
-            preparation_steps
- }
+      const saveButton = document.querySelector('save')
+      saveButton.addEventListener('click', function () {
+        const name = document.getElementById('name').value
+        const image = document.getElementById('image').value
+        const ingredients = document.getElementById('ingredients').value
+        const preparation_steps = document.getElementById('preparation_steps').value
+        const recipeobj = {
+          name,
+          image,
+          ingredients,
+          preparation_steps,
+        }
 
         fetch('/api/recipes/edit', {
-            method: 'POST',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-         recipeobj,
-
-          }),
-        })
-          .then((res) => res.json())
-        })
-       
-
-      
-
-
-    });
-
-
+          body: JSON.stringify(recipeobj),
+        }).then((res) => res.json())
+      })
+    })
 }
 
-function displayingredients(ingredients){
-    let ingredients_name='';
-    ingredients.forEach((ingredient) => {
-        ingredients_name += ingredient.ingredient+", ";
-    });
-    return ingredients_name;
-
+function displayingredients(ingredients) {
+  let ingredients_name = ''
+  ingredients.forEach((ingredient) => {
+    ingredients_name += ingredient.ingredient + ', '
+  })
+  return ingredients_name
 }
-
-    
-    
-
-   
