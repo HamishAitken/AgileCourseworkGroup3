@@ -3,7 +3,6 @@ const recipeTemplate = (element) => `
   <div class="col h-100">
     <div class="card" style="border-radius:7px;">
       <div class="card-body shadow">
-      etst
         <h5 class="card-title text-cente color-text-brownish">${element.name}</h5>
         <img 
           id="image"
