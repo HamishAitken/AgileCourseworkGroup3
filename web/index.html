@@ -14,7 +14,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
       />
-    <link rel="stylesheet" href="../resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/css/index.css" />
 
     <title>The Little Green Larder</title>
   </head>
@@ -202,8 +202,8 @@
                                   <img src="../resources/img/baking_flours.png" style="border-radius: 0px" alt="Baking goods" height="35px"/>
                                   <b>ingredients</b>
                                 </h5>
-                                <div class="d-flex flex-wrap" id="bakingGoods" v-for="ingredient in ingredients.data" >
-                                  <p class="element-flex ing_id"  v-model="ingredient.id">{{ingredient.name}}</p>
+                                <div class="d-flex flex-wrap" id="bakingGoods"  >
+                                  <p class="element-flex ing_id" v-for="ingredient in ingredients.data" v-model="ingredient.id">{{ingredient.name}}</p>
                                 </div>
                               </div>
                             </div>
@@ -383,13 +383,13 @@
                                 </div>
                               </div>
                            
-                              <div  class="" v-for="recipe in recipes.data">
+                              <div   v-for="recipe in recipes.data">
 
-                                <a v-bind:href="'/details_page.html?id='+recipe.id">
+                                <a v-bind:href="'/details_page.html?id='+recipe.id" class="row-cols-1 row-cols-md-2 g-5 mx-sm-4 mx-2 mt-5 mt-sm-0">
                                   <div class="col h-100">
-                                    <div class="card" style="border-radius:7px;
+                                    <div class="card " style="border-radius:7px;
                                       ">
-                                      <div class="card-body shadow">
+                                      <div class="card-body shadow ">
 
                                         <h5 class="card-title text-cente
                                           color-text-brownish">{{recipe.name}}</h5>
