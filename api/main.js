@@ -59,9 +59,8 @@ app.post('/api/login', (req, res) => {
 
   bcrypt.compare(password, user.password).then((result) => {
     if (!result) {
-      res.status(401).send(JSON.stringify({ error: 'Invalid login/password' }))
+      res.status(401).json({ error: 'Invalid login/password' })
     } else {
-      // TODO: generate and send JWT
       const token = jwt.sign(
         {
           username: user.username,

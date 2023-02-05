@@ -16,19 +16,6 @@ const recipeDocumentToJson = (recipe) => {
   }
 }
 
-recipeRouter.post('/', withJWTRole('admin'), (req, res) => {
-  // TODO: validation. even though only authorized users can add recipes, we should probably still do some checks
-  const body = req.body
-
-  const recipe = recipesCollection.insert({
-    name: body.name,
-    image: body.image,
-    ingredients: body.ingredients,
-    preparation_steps: body.preparation_steps,
-  })
-  res.json(recipeDocumentToJson(recipe))
-})
-
 recipeRouter.get('/', (_, res) => {
   res.json(recipesCollection.data.map(recipeDocumentToJson))
 })
@@ -39,6 +26,45 @@ recipeRouter.get('/:id', (req, res) => {
     res.status(404).json({ error: 'Recipe not found' })
   } else {
     res.json(recipeDocumentToJson(recipe))
+  }
+})
+
+recipeRouter.post('/', withJWTRole('admin'), (req, res) => {
+  // TODO: validation. even though only authorized users can add recipes, we should probably still do some checks
+  const body = req.body
+  const recipe = recipesCollection.insertOne({
+    name: body.name,
+    image: body.image,
+    ingredients: body.ingredients,
+    preparation_steps: body.preparation_steps,
+  })
+
+  if (!recipe) {
+    res.status(500).json({ error: 'Could not add the recipe' })
+  } else {
+    res.status(201).json(recipeDocumentToJson(recipe))
+  }
+})
+
+recipeRouter.put('/', withJWTRole('admin'), (req, res) => {
+  const body = req.body
+
+  const doc = recipesCollection.get(body.id)
+  delete body.id
+  const recipe = recipesCollection.update({ $loki: doc.$loki, meta: doc.meta, ...body })
+  if (!recipe) {
+    res.status(400).json({ error: 'Could not update the recipe' })
+  } else {
+    res.status(201).json(recipeDocumentToJson(recipe))
+  }
+})
+
+recipeRouter.delete('/:id', withJWTRole('admin'), (req, res) => {
+  const removed = recipesCollection.remove({ $loki: req.params.id })
+  if (!removed) {
+    res.status(404).json({ error: 'Recipe not found' })
+  } else {
+    res.sendStatus(204)
   }
 })
 
@@ -63,9 +89,8 @@ recipeRouter.post('/search_by_ingredients', (req, res) => {
 recipeRouter.post('/search_by_name', (req, res) => {
   const search = req.body.search_value
   if (!search || search.length < 3) return res.status(400).json({ error: 'Invalid search query' })
-  const regex = new RegExp(search, 'i')
 
-  const matchingRecipes = recipesCollection.where((recipe) => regex.test(recipe.name))
+  const matchingRecipes = recipesCollection.find({ name: { $regex: [search, 'i'] } })
   if (matchingRecipes.length === 0) {
     res.status(404).json({ error: 'No recipes found' })
   } else {
