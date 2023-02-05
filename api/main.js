@@ -22,7 +22,7 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        scriptSrc: ["'self'", "'unsafe-inline'", 'https:'],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https:'],
         scriptSrcAttr: ["'unsafe-inline'"],
         imgSrc: ["'self'", 'data:', 'https:'],
         upgradeInsecureRequests: null,

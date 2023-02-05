@@ -1,25 +1,124 @@
-const recipeTemplate = (element) => `
-<a href="/details_page.html?id=${element.id}">
-  <div class="col h-100">
-    <div class="card" style="border-radius:7px;">
-      <div class="card-body shadow">
-        <h5 class="card-title text-cente color-text-brownish">${element.name}</h5>
-        <img 
-          id="image"
-          src="${element.image}"
-          alt="${element.title}"
-          class="card-img-top"
-          style="border-radius:10px;height:200px;object-fit: cover;object-position: center;"
-        >
-        </div>
-      </div>
-    </div>
-  </div>
-</a>
-`
+const { createApp } = Vue
+window.onload = function () {
+createApp({
+  data() {
+
+    return {
+
+      recipes: {
+      data: []
+    },
+      ingredients: {
+      data: [ ]
+      },
+      
+    };
+   
+  },
+  methods:{
+//fetch all recipes and display them
+    fetch_recipes() {
+      fetch(`/api/recipes/`)
+        .then((res) => res.json())
+        .then((data) => {
+        
+            
+          
+             
+          this.recipes = {
+        data:data
+          }
+          
+          console.log(this.recipes.data);
+        })
+    },
+    //search for recipes using the title of the recipe
+  search_by_name(){
+    const search_value = document.getElementById('search_recipes').value;
+
+    fetch('/api/recipes/search_by_name', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        search_value,
+      }),
+    })
+    .then((res) => res.json().then((response) => [res.status, response]))
+    .then(([status_code, data]) => {
+      if (status_code === 200) {
+     this.recipes={
+      data: data
+     }
+     console.log(this.recipes.data);
+      }
+    })
+  },
+    // fetch all ingredients and display them
+   fetch_ingredients(){
+
+      fetch('/api/ingredients/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => res.json().then((response) => [res.status, response]))
+      .then(([status_code, data]) => {
+        if (status_code === 200) {
+       this.ingredients={
+        data: data
+       }
+       console.log(this.ingredients.data);
+        }
+      })
+    },
+    //search for ingredients
+ search_ingredients(){
+  const search_value = document.getElementById('search_ingredients').value;
+
+  fetch('/api/ingredients/search_by_name', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      search_value,
+    }),
+  })
+  .then((res) => res.json().then((response) => [res.status, response]))
+  .then(([status_code, data]) => {
+    if (status_code === 200) {
+   this.ingredients={
+    data: data
+   }
+   console.log(this.ingredients.data);
+    }
+  })
+ },
+
+  
+  },
+  created() {
+    this.fetch_recipes();
+    this.fetch_ingredients()
+
+  }
+}).mount('#recipes_app')
+
+};
+//search by name vue
+
+
+
+
+
+
 
 // just fetch some recipes may be limited to 10 recipes
 // TODO: this currently fetches ALL recipes, should update API to allow fetching for less
+/*
 fetch('/api/recipes/')
   .then((res) => res.json())
   .then((data) => {
@@ -34,6 +133,7 @@ fetch('/api/recipes/')
       image.src = 'https://www.floatex.com/wp-content/uploads/2016/04/dummy-post-horisontal.jpg'
     }
   })
+  
 
 const search_recipes = document.getElementById('search_recipes')
 // search for recipes using the title of the recipe
@@ -68,8 +168,9 @@ search_recipes.addEventListener('keyup', (e) => {
       })
   }
 })
-
-// fetch ingredients
+*/
+// fetch ingredients ,/, 
+/*
 fetch('/api/ingredients/')
   .then((res) => res.json())
   .then((data) => {
@@ -140,8 +241,8 @@ fetch('/api/ingredients/')
           })
       })
     })
-  })
-
+  })*/
+/*
 // search for ingredients
 const search_ingredients = document.getElementById('search_ingredients')
 // TODO: Extract handler to function, add it as a button click handler
@@ -181,7 +282,7 @@ search_ingredients.addEventListener('keyup', (e) => {
       })
   }
 })
-
+*/
 function removeFromShoppingCart(element) {
   // Get the Text of the <p> Element of the List where the button was clicked.
   const text = element.previousElementSibling.innerText

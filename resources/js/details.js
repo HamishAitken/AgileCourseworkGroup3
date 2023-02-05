@@ -1,9 +1,51 @@
-const urlParams = new URLSearchParams(window.location.search)
-const id = urlParams.get('id')
+const { createApp } = Vue
+createApp({
+  data() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const id = urlParams.get('id')
+    return {
+      recipe: {},
+      fetchData() {
+        fetch(`/api/recipes/${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+           
+            this.recipe = {
 
-fetch(`/api/recipes/${id}`)
-  .then((res) => res.json())
-  .then((data) => {
+              name: data.name,
+              image: data.image,
+              ingredients: data.ingredients,
+              preparation_steps:  data.preparation_steps
+            }
+            console.log(this.recipe);
+          })
+      }
+    }
+  },
+  created() {
+    this.fetchData();
+  }
+}).mount('#app')
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+ 
+    /*
+     fetch(`/api/recipes/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
     // TODO: check whether a recipe was returned, instead of an error
     // TODO: #11 add a share recipe link which would allow user to share the page
     const recipe_title = document.getElementById('recipe_title')
@@ -12,6 +54,9 @@ fetch(`/api/recipes/${id}`)
     const recipe_ingredients = document.getElementById('recipe_ingredients')
 
     recipe_title.innerHTML = data.name
+
+   
+
 
     // TODO: add cooking time
 
@@ -51,7 +96,7 @@ fetch(`/api/recipes/${id}`)
       <p id="markdown">${instructions}</p>
       `
   })
-
+*/
 function addToShoppingCart(element) {
   // Get the Text of the <p> Element of the List where the button was clicked.
   // TODO: save ingredient IDs instead of ingredient names. Use the IDs in the cart to group and add links to similar ingredients.
