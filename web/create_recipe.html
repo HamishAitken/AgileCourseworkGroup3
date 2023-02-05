@@ -27,41 +27,39 @@
     </style>
   </head>
   <body class="bg-success">
-    <div id="navbar-container"></div>
+    <div id="navbar-container" ></div>
     <script>
       const navbar = document.getElementById('navbar-container')
       navbar.appendChild(navigationbar())
     </script>
-    <div class="container text-white">
+    <div class="container text-white mt-3">
       <div>
         <h3 class="text-center">Recipe Details</h3>
       </div>
-      <div class="border-5 rounded-5">
+      <div>
         <form>
           <!-- Name input -->
-          <div class="col-auto">
-            <label class="form-label">recipe name:</label>
-            <input type="text" id="recipe-name" class="form-control" />
+          <div class="col-auto mt-3">
+            <input type="text" id="recipe-name" class="form-control" placeholder="recipe name:" />
           </div>
-          <div class="col-auto">
-            <label class="form-label">recipe image url:</label>
-            <input type="text" id="image" class="form-control" />
+          <div class="col-auto mt-3" >
+            <input type="text" id="image" class="form-control" placeholder="recipe image url:" />
           </div>
           <!-- Message input -->
-          <div class="col-auto">
-            <label class="form-label" for="ingredients">Ingredients required:</label>
-            <textarea class="form-control" id="ingredients" rows="5"></textarea>
+          <div class="col-auto mt-3">
+         
+            <textarea class="form-control" id="ingredients" rows="7" placeholder="Ingredients required:"></textarea>
           </div>
 
           <!-- Message input -->
-          <div class="fcol-auto">
-            <label class="form-label">Preparation instructions:</label>
-            <textarea class="form-control" id="instructions" rows="10"></textarea>
+          <div class="col-auto mt-3">
+           
+            <textarea class="form-control" id="instructions" rows="10" placeholder="Preparation instructions:"></textarea>
           </div>
 
           <!-- Submit button -->
-          <div class="d-flex justify-content-center">
-            <button id="submit" type="button" class="btn btn-primary btn-block mb-4 mt-3">save recipe</button>
+          <div class="d-flex justify-content-center mt-3">
+            <button id="submit" type="button" class="btn btn-primary btn-block mb-4 mt-3">create recipe</button>
           </div>
         </form>
       </div>

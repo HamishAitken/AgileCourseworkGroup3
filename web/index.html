@@ -193,7 +193,7 @@
             <p class="intro-inline text-center mt-1 d-none d-sm-block">Recipes</p>
             <div class="d-flex flex-row top-bar justify-content-between">
               <div class="align-self-start" style="margin-top: -55px">
-                <img src="resources/img/Logo.png" class="px-2" alt="Logo" width="175px" height="100%" class="logoTop" />
+                <img src="resources/img/Logo.png" class="px-2 logoTop" alt="Logo" style="width:175px;height:100%;" />
               </div>
               <div class="input-group px-2 main-font searchBarTop mx-0 w-50 d-none d-sm-flex">
                 <input
@@ -254,8 +254,8 @@
                 </a>
               </div>
             </div>
-            <div class="container">
-              <div class="input-group px-4 main-font searchBarTop d-sm-none">
+            <div class="container ">
+              <div class="input-group px-4 main-font searchBarTop d-sm-none ">
                 <input
                   @keyup.enter="search_recipes"
                   type="search"
@@ -270,28 +270,29 @@
               </div>
             </div>
           </div>
+<!--formating this-->
+<div class="row mt-5">
+  <div v-for="recipe in recipes" class="col-sm-6">
+    <a :href="'/details_page.html?id='+recipe.id">
+      <div class="card mb-4" style="border-radius: 7px">
+        <div class="card-body shadow">
+          <h5 class="card-title text-cente color-text-brownish">{{recipe.name}}</h5>
+          <img
+            id="image"
+            :src="recipe.image"
+            :alt="recipe.name"
+            class="card-img-top"
+            style="border-radius: 10px; height: 200px; object-fit: cover; object-position: center"
+          />
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
 
-          <div v-for="recipe in recipes">
-            <a
-              :href="'/details_page.html?id='+recipe.id"
-              class="row-cols-1 row-cols-md-2 g-5 mx-sm-4 mx-2 mt-5 mt-sm-0"
-            >
-              <div class="col h-100">
-                <div class="card" style="border-radius: 7px">
-                  <div class="card-body shadow">
-                    <h5 class="card-title text-cente color-text-brownish">{{recipe.name}}</h5>
-                    <img
-                      id="image"
-                      :src="recipe.image"
-                      :alt="recipe.name"
-                      class="card-img-top"
-                      style="border-radius: 10px; height: 200px; object-fit: cover; object-position: center"
-                    />
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
+
+
+
         </div>
       </div>
       <a
