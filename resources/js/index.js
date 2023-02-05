@@ -1,120 +1,101 @@
 const { createApp } = Vue
 window.onload = function () {
-createApp({
-  data() {
-
-    return {
-
-      recipes: {
-      data: []
-    },
-      ingredients: {
-      data: [ ]
-      },
-      
-    };
-   
-  },
-  methods:{
-//fetch all recipes and display them
-    fetch_recipes() {
-      fetch(`/api/recipes/`)
-        .then((res) => res.json())
-        .then((data) => {
-        
-            
-          
-             
-          this.recipes = {
-        data:data
-          }
-          
-          console.log(this.recipes.data);
-        })
-    },
-    //search for recipes using the title of the recipe
-  search_by_name(){
-    const search_value = document.getElementById('search_recipes').value;
-
-    fetch('/api/recipes/search_by_name', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        search_value,
-      }),
-    })
-    .then((res) => res.json().then((response) => [res.status, response]))
-    .then(([status_code, data]) => {
-      if (status_code === 200) {
-     this.recipes={
-      data: data
-     }
-     console.log(this.recipes.data);
-      }
-    })
-  },
-    // fetch all ingredients and display them
-   fetch_ingredients(){
-
-      fetch('/api/ingredients/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+  createApp({
+    data() {
+      return {
+        recipes: {
+          data: [],
         },
-      })
-      .then((res) => res.json().then((response) => [res.status, response]))
-      .then(([status_code, data]) => {
-        if (status_code === 200) {
-       this.ingredients={
-        data: data
-       }
-       console.log(this.ingredients.data);
-        }
-      })
+        ingredients: {
+          data: [],
+        },
+      }
     },
-    //search for ingredients
- search_ingredients(){
-  const search_value = document.getElementById('search_ingredients').value;
+    methods: {
+      //fetch all recipes and display them
+      fetch_recipes() {
+        fetch(`/api/recipes/`)
+          .then((res) => res.json())
+          .then((data) => {
+            this.recipes = {
+              data: data,
+            }
 
-  fetch('/api/ingredients/search_by_name', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+            console.log(this.recipes.data)
+          })
+      },
+      //search for recipes using the title of the recipe
+      search_by_name() {
+        const search_value = document.getElementById('search_recipes').value
+
+        fetch('/api/recipes/search_by_name', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            search_value,
+          }),
+        })
+          .then((res) => res.json().then((response) => [res.status, response]))
+          .then(([status_code, data]) => {
+            if (status_code === 200) {
+              this.recipes = {
+                data: data,
+              }
+              console.log(this.recipes.data)
+            }
+          })
+      },
+      // fetch all ingredients and display them
+      fetch_ingredients() {
+        fetch('/api/ingredients/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => res.json().then((response) => [res.status, response]))
+          .then(([status_code, data]) => {
+            if (status_code === 200) {
+              this.ingredients = {
+                data: data,
+              }
+              console.log(this.ingredients.data)
+            }
+          })
+      },
+      //search for ingredients
+      search_ingredients() {
+        const search_value = document.getElementById('search_ingredients').value
+
+        fetch('/api/ingredients/search_by_name', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            search_value,
+          }),
+        })
+          .then((res) => res.json().then((response) => [res.status, response]))
+          .then(([status_code, data]) => {
+            if (status_code === 200) {
+              this.ingredients = {
+                data: data,
+              }
+              console.log(this.ingredients.data)
+            }
+          })
+      },
     },
-    body: JSON.stringify({
-      search_value,
-    }),
-  })
-  .then((res) => res.json().then((response) => [res.status, response]))
-  .then(([status_code, data]) => {
-    if (status_code === 200) {
-   this.ingredients={
-    data: data
-   }
-   console.log(this.ingredients.data);
-    }
-  })
- },
-
-  
-  },
-  created() {
-    this.fetch_recipes();
-    this.fetch_ingredients()
-
-  }
-}).mount('#recipes_app')
-
-};
+    created() {
+      this.fetch_recipes()
+      this.fetch_ingredients()
+    },
+  }).mount('#recipes_app')
+}
 //search by name vue
-
-
-
-
-
-
 
 // just fetch some recipes may be limited to 10 recipes
 // TODO: this currently fetches ALL recipes, should update API to allow fetching for less
@@ -169,7 +150,7 @@ search_recipes.addEventListener('keyup', (e) => {
   }
 })
 */
-// fetch ingredients ,/, 
+// fetch ingredients ,/,
 /*
 fetch('/api/ingredients/')
   .then((res) => res.json())
