@@ -18,8 +18,8 @@
 
     <title>The Little Green Larder</title>
   </head>
-  <body id="recipes_app">
-    <div class="container-flex container-custom">
+  <body>
+    <div class="container-flex container-custom" id="recipes_app">
       <div class="row g-0">
         <div class="border-right col-xs-12 col-sm-3" id="larder">
           <div class="navbar-custom d-flex flex-column d-sm-none">
@@ -80,11 +80,12 @@
                 <input
                   type="search"
                   id="recipe_search"
+                  @keyup.enter="search_ingredients"
                   class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch"
                   placeholder="Search for ingredients... (e.g rice,onions)"
                   aria-label="Search for ingredients"
                 />
-                <button class="btn button-search-bar" type="button" id="searchMobileRecipe" onclick="getRecipes()">
+                <button class="btn button-search-bar" type="button" id="searchMobileRecipe" @click="search_ingredients">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -109,13 +110,13 @@
               <input
                 type="search"
                 id="search_ingredients"
-                @keyup.enter="search_ingredients()"
+                @keyup.enter="search_ingredients"
                 class="form-control shadow border border-white background-grey search-bar"
                 placeholder="Search for ingredients... (e.g rice,onions)"
                 aria-label="Search for ingredients"
               />
               <!-- TODO: click handler?-->
-              <button class="btn button-search-bar" type="button" id="button-addon2">
+              <button class="btn button-search-bar" type="button" id="button-addon2" @click="search_ingredients">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -149,7 +150,7 @@
                       <b>ingredients</b>
                     </h5>
                     <div class="d-flex flex-wrap" id="bakingGoods">
-                      <p class="element-flex ing_id" v-for="ingredient in ingredients.data" v-model="ingredient.id">
+                      <p class="element-flex ing_id" v-for="ingredient in ingredients" :id="ingredient.id">
                         {{ingredient.name}}
                       </p>
                     </div>
@@ -196,15 +197,16 @@
               </div>
               <div class="input-group px-2 main-font searchBarTop mx-0 w-50 d-none d-sm-flex">
                 <input
-                  @keyup.enter="search_by_name()"
+                  @keyup.enter="search_recipes"
                   type="search"
                   id="search_recipes"
                   class="form-control shadow border border-white background-grey search-bar search-bar-recipe"
                   placeholder="Search for recipes..."
                   aria-label="Search for recipes"
                 />
-                <!-- TODO: click handler? -->
-                <button class="btn button-search-bar" type="button" id="button-search-recipe">Search</button>
+                <button class="btn button-search-bar" type="button" id="button-search-recipe" @click="search_recipes">
+                  Search
+                </button>
               </div>
               <div class="align-items-end mx-2-sm mx-2">
                 <a href="https://thelittlegreenlarder.com/pages/about-us" target="_blank">
@@ -222,8 +224,8 @@
                     />
                   </svg>
                 </a>
-                <a href="https://www.facebook.com/thelittlegreenlarder/" target="_blank" class=""
-                  ><svg
+                <a href="https://www.facebook.com/thelittlegreenlarder/" target="_blank">
+                  <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
                     height="32"
@@ -236,7 +238,7 @@
                     />
                   </svg>
                 </a>
-                <a href="https://www.instagram.com/thelittlegreenlarder/?hl=en" target="_blank" class="">
+                <a href="https://www.instagram.com/thelittlegreenlarder/?hl=en" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
@@ -255,18 +257,21 @@
             <div class="container">
               <div class="input-group px-4 main-font searchBarTop d-sm-none">
                 <input
+                  @keyup.enter="search_recipes"
                   type="search"
                   id="formMobileRecipe"
                   class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch"
                   placeholder="Search for recipes..."
                   aria-label="Search for recipes"
                 />
-                <button class="btn button-search-bar" type="button" id="searchMobileRecipe">Search</button>
+                <button class="btn button-search-bar" type="button" id="searchMobileRecipe" @click="search_recipes">
+                  Search
+                </button>
               </div>
             </div>
           </div>
 
-          <div v-for="recipe in recipes.data">
+          <div v-for="recipe in recipes">
             <a
               :href="'/details_page.html?id='+recipe.id"
               class="row-cols-1 row-cols-md-2 g-5 mx-sm-4 mx-2 mt-5 mt-sm-0"
@@ -338,8 +343,8 @@
                 <img src="resources/img/Logo.png" class="px-2" alt="Logo" width="175px" height="100%" class="logoTop" />
               </div>
               <div class="align-items-end mx-4-sm mx-2">
-                <a href="https://thelittlegreenlarder.com/pages/about-us" target="_blank" class=""
-                  ><svg
+                <a href="https://thelittlegreenlarder.com/pages/about-us" target="_blank">
+                  <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
                     height="32"
@@ -347,16 +352,14 @@
                     class="bi bi-info-circle icon-hover"
                     viewBox="0 0 16 16"
                   >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                     <path
                       d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
                     />
                   </svg>
                 </a>
-                <a href="https://www.facebook.com/thelittlegreenlarder/" target="_blank" class=""
-                  ><svg
+                <a href="https://www.facebook.com/thelittlegreenlarder/" target="_blank">
+                  <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
                     height="32"
@@ -369,7 +372,7 @@
                     />
                   </svg>
                 </a>
-                <a href="https://www.instagram.com/thelittlegreenlarder/?hl=en" target="_blank" class="">
+                <a href="https://www.instagram.com/thelittlegreenlarder/?hl=en" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"

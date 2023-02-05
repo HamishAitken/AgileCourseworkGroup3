@@ -3,29 +3,21 @@ window.onload = function () {
   createApp({
     data() {
       return {
-        recipes: {
-          data: [],
-        },
-        ingredients: {
-          data: [],
-        },
+        recipes: [],
+        ingredients: [],
       }
     },
     methods: {
       //fetch all recipes and display them
       fetch_recipes() {
-        fetch(`/api/recipes/`)
+        fetch('/api/recipes/')
           .then((res) => res.json())
           .then((data) => {
-            this.recipes = {
-              data: data,
-            }
-
-            console.log(this.recipes.data)
+            this.recipes = data
           })
       },
       //search for recipes using the title of the recipe
-      search_by_name() {
+      search_recipes() {
         const search_value = document.getElementById('search_recipes').value
 
         fetch('/api/recipes/search_by_name', {
@@ -40,28 +32,17 @@ window.onload = function () {
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, data]) => {
             if (status_code === 200) {
-              this.recipes = {
-                data: data,
-              }
-              console.log(this.recipes.data)
+              this.recipes = data
             }
           })
       },
       // fetch all ingredients and display them
       fetch_ingredients() {
-        fetch('/api/ingredients/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        fetch('/api/ingredients/')
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, data]) => {
             if (status_code === 200) {
-              this.ingredients = {
-                data: data,
-              }
-              console.log(this.ingredients.data)
+              this.ingredients = data
             }
           })
       },
@@ -81,10 +62,7 @@ window.onload = function () {
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, data]) => {
             if (status_code === 200) {
-              this.ingredients = {
-                data: data,
-              }
-              console.log(this.ingredients.data)
+              this.ingredients = data
             }
           })
       },
@@ -95,175 +73,7 @@ window.onload = function () {
     },
   }).mount('#recipes_app')
 }
-//search by name vue
 
-// just fetch some recipes may be limited to 10 recipes
-// TODO: this currently fetches ALL recipes, should update API to allow fetching for less
-/*
-fetch('/api/recipes/')
-  .then((res) => res.json())
-  .then((data) => {
-    const recipe_card = document.getElementById('recipesCard')
-    let recipeHTML = ''
-    for (const element of data) {
-      recipeHTML += recipeTemplate(element)
-    }
-    recipe_card.innerHTML = recipeHTML
-    const image = document.getElementById('image')
-    if (image.src === '') {
-      image.src = 'https://www.floatex.com/wp-content/uploads/2016/04/dummy-post-horisontal.jpg'
-    }
-  })
-  
-
-const search_recipes = document.getElementById('search_recipes')
-// search for recipes using the title of the recipe
-search_recipes.addEventListener('keyup', (e) => {
-  if (e.key === 'Enter') {
-    const search_value = search_recipes.value
-    search_recipes.value = ''
-
-    fetch('/api/recipes/search_by_name', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        search_value,
-      }),
-    })
-      .then((res) => res.json().then((response) => [res.status, response]))
-      .then(([status_code, data]) => {
-        // TODO: better error message (show a special text?)
-        if (status_code === 200) {
-          const recipe_card = document.getElementById('recipesCard')
-          let recipeHTML = ''
-
-          for (const element of data) {
-            recipeHTML += recipeTemplate(element)
-            recipe_card.innerHTML = recipeHTML
-          }
-        } else {
-          alert('No recipes found!')
-        }
-      })
-  }
-})
-*/
-// fetch ingredients ,/,
-/*
-fetch('/api/ingredients/')
-  .then((res) => res.json())
-  .then((data) => {
-    const elements = data
-    const ingredientContainer = document.getElementById('ingredients_container')
-    let ingredientHTML = ''
-    for (let i = 0; i < elements.length; i++) {
-      // TODO: add ingredients to categories. why is this "< 15" ?
-      if (i < 15) {
-        const id = elements[i].id
-        const name = elements[i].name
-
-        ingredientHTML += `
-                  <p class="element-flex ing_id" value="${id}">${name}</p>
-                `
-      }
-    }
-    ingredientContainer.innerHTML = ingredientHTML
-
-    const selectedIngredientIds = []
-    const ingIdElements = document.querySelectorAll('.ing_id')
-
-    ingIdElements.forEach((ingIdElement) => {
-      ingIdElement.addEventListener('click', function () {
-        if (!this.getAttribute('value')) {
-          alert('no value')
-          return
-        }
-
-        const id = this.getAttribute('value')
-        // TODO: refactor, wtf is this. pretty sure it does not use actual recipe id
-        const index = selectedIngredientIds.indexOf(id)
-        if (index === -1) {
-          selectedIngredientIds.push(id)
-          this.style.backgroundColor = 'green'
-        } else {
-          selectedIngredientIds.splice(index, 1)
-          this.style.backgroundColor = ''
-        }
-
-        // convert search ingredient to object?
-        const search_value = selectedIngredientIds.map((id) => parseInt(id))
-
-        // TODO: extract to a function. add click handler for "search" button which uses this
-        // find a recipe using ingredients
-        fetch('/api/recipes/search_by_ingredients', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            search_value,
-          }),
-        })
-          .then((res) => res.json().then((response) => [res.status, response]))
-          .then(([status_code, data]) => {
-            if (status_code === 200) {
-              const recipe_card = document.getElementById('recipesCard')
-              let recipeHTML = ''
-              for (const element of data) {
-                recipeHTML += recipeTemplate(element)
-                recipe_card.innerHTML = recipeHTML
-              }
-            } else {
-              // TODO:
-              console.log('not found')
-            }
-          })
-      })
-    })
-  })*/
-/*
-// search for ingredients
-const search_ingredients = document.getElementById('search_ingredients')
-// TODO: Extract handler to function, add it as a button click handler
-search_ingredients.addEventListener('keyup', (e) => {
-  if (e.key === 'Enter') {
-    const search_value = search_ingredients.value
-    document.getElementById('search_ingredients').value = ''
-    fetch('/api/ingredients/search_by_name', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        search_value,
-      }),
-    })
-      .then((res) => res.json().then((response) => [res.status, response]))
-      .then(([result, response]) => {
-        // TODO: Better way to notify of error (not alert). Should NOT use alerts ANYWHERE
-        if (result === 400) {
-          alert('invalid search query')
-        } else if (result === 404) {
-          alert('No ingredients found')
-        } else {
-          const data = response
-          const ingredientContainer = document.getElementById('ingredients_container')
-          let ingredientHTML = ''
-          for (const element of data) {
-            const id = element.id
-            const name = element.name
-            ingredientHTML += `
-                  <p class="element-flex ing_id" value="${id}">${name}</p>
-                `
-          }
-          ingredientContainer.innerHTML = ingredientHTML
-        }
-      })
-  }
-})
-*/
 function removeFromShoppingCart(element) {
   // Get the Text of the <p> Element of the List where the button was clicked.
   const text = element.previousElementSibling.innerText
@@ -298,6 +108,7 @@ function generateShoppingCart() {
     shopping_mobile.appendChild(par)
     return
   }
+
   for (let i = 0; i < cart.length; i++) {
     const li = document.createElement('li')
     li.classList.add('mb-2')
