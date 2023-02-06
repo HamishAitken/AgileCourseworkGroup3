@@ -80,10 +80,11 @@
                 <input
                   type="search"
                   id="recipe_search"
-                  @keyup.enter="search_ingredients"
                   class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch"
                   placeholder="Search for ingredients... (e.g rice,onions)"
                   aria-label="Search for ingredients"
+                  @keyup.enter="search_ingredients"
+                  v-model="ingredient_search_input"
                 />
                 <button class="btn button-search-bar" type="button" id="searchMobileRecipe" @click="search_ingredients">
                   <svg
@@ -110,10 +111,11 @@
               <input
                 type="search"
                 id="search_ingredients"
-                @keyup.enter="search_ingredients"
                 class="form-control shadow border border-white background-grey search-bar"
                 placeholder="Search for ingredients... (e.g rice,onions)"
                 aria-label="Search for ingredients"
+                @keyup.enter="search_ingredients"
+                v-model="ingredient_search_input"
               />
               <button class="btn button-search-bar" type="button" id="button-addon2" @click="search_ingredients">
                 <svg
@@ -201,12 +203,13 @@
               </div>
               <div class="input-group px-2 main-font searchBarTop mx-0 w-50 d-none d-sm-flex">
                 <input
-                  @keyup.enter="search_recipes"
                   type="search"
                   id="search_recipes"
                   class="form-control shadow border border-white background-grey search-bar search-bar-recipe"
                   placeholder="Search for recipes..."
                   aria-label="Search for recipes"
+                  @keyup.enter="search_recipes"
+                  v-model="recipe_search_input"
                 />
                 <button class="btn button-search-bar" type="button" id="button-search-recipe" @click="search_recipes">
                   Search
@@ -261,12 +264,13 @@
             <div class="container">
               <div class="input-group px-4 main-font searchBarTop d-sm-none">
                 <input
-                  @keyup.enter="search_recipes"
                   type="search"
                   id="formMobileRecipe"
                   class="form-control shadow border border-white background-grey search-bar search-bar-recipe align-self-stretch"
                   placeholder="Search for recipes..."
                   aria-label="Search for recipes"
+                  @keyup.enter="search_recipes"
+                  v-model="recipe_search_input"
                 />
                 <button class="btn button-search-bar" type="button" id="searchMobileRecipe" @click="search_recipes">
                   Search

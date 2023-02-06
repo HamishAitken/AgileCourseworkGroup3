@@ -3,6 +3,8 @@ window.onload = function () {
   createApp({
     data() {
       return {
+        ingredient_search_input: '',
+        recipe_search_input: '',
         recipes: [],
         ingredients: [],
         chosenIngredients: [],
@@ -19,7 +21,7 @@ window.onload = function () {
       },
       //search for recipes using the title of the recipe
       search_recipes() {
-        const search_value = document.getElementById('search_recipes').value
+        const search_value = this.recipe_search_input
 
         fetch('/api/recipes/search_by_name', {
           method: 'POST',
@@ -49,23 +51,27 @@ window.onload = function () {
       },
       //search for ingredients
       search_ingredients() {
-        const search_value = document.getElementById('search_ingredients').value
+        const search_value = this.ingredient_search_input
 
-        fetch('/api/ingredients/search_by_name', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            search_value,
-          }),
-        })
-          .then((res) => res.json().then((response) => [res.status, response]))
-          .then(([status_code, data]) => {
-            if (status_code === 200) {
-              this.ingredients = data
-            }
+        if (search_value === '') {
+          this.fetch_ingredients()
+        } else {
+          fetch('/api/ingredients/search_by_name', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              search_value,
+            }),
           })
+            .then((res) => res.json().then((response) => [res.status, response]))
+            .then(([status_code, data]) => {
+              if (status_code === 200) {
+                this.ingredients = data
+              }
+            })
+        }
       },
       toggleIngredient(e) {
         const search_id = parseInt(e.target.id.split('_')[1])
