@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>admin page</title>
+    <script src="/navbar.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!--bootstrap css cdn-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <style>
+      hr {
+        border: 2px solid #000;
+        background-color: #000;
+        height: 4px;
+      }
+
+      .nav-link:hover {
+        background: #0f870f;
+
+        border-radius: 10px;
+      }
+
+      .searchbar {
+        margin-bottom: auto;
+        margin-top: auto;
+        height: 60px;
+        background-color: #353b48;
+        border-radius: 30px;
+        padding: 10px;
+      }
+      .search_input {
+        color: white;
+        border: 0;
+        outline: 0;
+        background: none;
+        width: 0;
+        caret-color: transparent;
+        line-height: 40px;
+        transition: width 0.4s linear;
+      }
+
+      .searchbar:hover > .search_input {
+        padding: 0 10px;
+        width: 450px;
+
+        transition: width 0.4s linear;
+      }
+      .searchbar:hover > .search_icon {
+        background: white;
+      }
+
+      .search_icon {
+        height: 40px;
+        width: 40px;
+        float: right;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <div id="navbar-container"></div>
+    <script>
+      const navbar = document.getElementById("navbar-container")
+      navbar.appendChild(navigationbar())
+    </script>
+    <!--search for recipies-->
+    <div class=" d-flex justify-content-center">
+    <div class="input-group px-2 main-font searchBarTop mx-0 w-50 d-none d-sm-flex">
+      <input
+        @keyup.enter="search_recipes"
+        type="search"
+        id="search_recipes"
+        class="form-control shadow border border-white background-grey search-bar search-bar-recipe"
+        placeholder="Search for recipes..."
+        aria-label="Search for recipes"
+      />
+      <button class="btn btn-primary" type="button" id="button-search-recipe" @click="search_recipes">
+        Search
+      </button>
+    </div>
+  </div>
+
+    <!--display all recipes-->
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h3 class="text-center">Recipes</h3>
+          <hr />
+        </div>
+      </div>
+      <div class="row" id="app">
+        <div class="col-12">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Recipe Name</th>
+                <th>edit</th>
+                <th>delete</th>
+              </tr>
+            </thead>
+            <tbody v-for="recipe in recipes.data">
+              <tr>
+                <td>{{recipe.name}}</td>
+
+                <td>
+                  <button id="edit" class="btn btn-primary" @click=" editRecipe($event)" :value="recipe.id">
+                    edit
+                  </button>
+                </td>
+                <td>
+                  <button id="delete" class="btn btn-danger"     @click="deleteRecipe($event)" :value="recipe.id">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!--bootstrap javascript cdn-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/resources/js/admin.js"></script>
+  </body>
+</html>

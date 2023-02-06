@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>EDITOR</title>
+    <script src="/navbar.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!--bootstrap css cdn-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-success" id="app">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-dark ">
+        <div class="container-fluid ">
+            <a class="navbar-brand" href="/admin.html">
+                <img src="https://cdn.shopify.com/s/files/1/0397/3749/1613/files/littleGreenLogo_360x.jpg?v=1613552940" alt="littleGreenLogo_360x" style="width:80px;height:50px;" class="rounded">
+              </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/admin.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/create_recipe.html">create recipe</a>
+              </li>
+        
+          
+            </ul>
+          </div>
+        </div>
+      </nav>
+   
+     <div>
+        <h1 class=" d-flex justify-content-center text-white">Edit Recipe</h1>
+      </div>
+  
+      <div id="editor" class="bg-white container rounded-3 mt-3"  >
+           
+              <form>
+                <div class="form-group">
+                  <label class="font-weight-bold" for="name"><b>Name:</b></label>
+                  <input type="text" class="form-control" id="name" :value="recipe.name" />
+                </div>
+                <div class="form-group ">
+                  <label class="font-weight-bold" for="image"><b>Image:</b></label>
+                  <input type="text" class="form-control" id="image" :value="recipe.image" />
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold" for="ingredients" ><b>ingredients</b></label>
+                  <textarea class="form-control" id="ingredients" rows="8" >
+                    {{ingredientsList}}
+                  </textarea>
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold" for="preparation_steps"><b>Preparation Steps:</b></label>
+                  <textarea class="form-control" id="preparation_steps" rows="10" :value="recipe.preparation_steps"></textarea>
+                </div>
+              </form>
+            
+            <div class="d-flex justify-content-between mt-3">
+              <button id="save" type="button" class="btn btn-primary " data-dismiss="modal" @click="saveChanges()">Save changes</button>
+              <button type="button" id="close" class="btn btn-secondary ms-5" data-dismiss="modal" @click="close()">Close</button>
+            </div>
+          </div>
+ 
+
+   
+  </body>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          recipe: [],
+          ingredientsList: ''
+        }
+      },
+      methods: {
+        async getRecipes() {
+          const urlParams = new URLSearchParams(window.location.search)
+            const id = urlParams.get('id')
+         fetch(`/api/recipes/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",     
+          },
+
+          })
+              .then((response) => response.json())
+              .then((data) => {
+                  this.recipe = {
+                      name: data.name,
+                      image: data.image,
+                      preparation_steps: data.preparation_steps,
+                    }
+                  const ingredients= data.ingredients;
+                  for (let i = 0; i < ingredients.length; i++) {
+                      this.ingredientsList += ingredients[i].ingredient+'\n';
+                  }
+                  console.log(this.recipe);
+              })
+
+
+     
+        },
+        close(){
+          window.location.href = "/admin.html"
+
+        },
+        saveChanges(){
+          const urlParams = new URLSearchParams(window.location.search)
+          const id = urlParams.get('id')
+          const token = JSON.parse(localStorage.getItem("token"))
+          if (!token) {
+            window.location.href = "/login.html"
+          }
+
+          const name = document.getElementById('name').value;
+          const image = document.getElementById('image').value;
+          const ingredients = document.getElementById('ingredients').value;
+          //format the ingredients 
+            const ingredientsList = ingredients.split('\n');
+            const ingredientsArray = [];
+            for (let i = 0; i < ingredientsList.length; i++) {
+                ingredientsArray.push({ingredient: ingredientsList[i]});
+            }
+            console.log(ingredientsArray);
+          const preparation_steps = document.getElementById('preparation_steps').value;
+
+ 
+        fetch(`/api/recipes/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",  
+            "Authorization": "Bearer " + token,
+          },
+          body: JSON.stringify({
+              id: id,
+            name: name,
+            image: image,
+            ingredients: ingredientsArray,
+            preparation_steps: preparation_steps
+          }),
+          })
+      .then((response) => 
+      {
+        if (response.status === 201) {
+            const successAlert = document.createElement("div");
+            successAlert.classList.add("alert", "alert-success");
+            successAlert.innerHTML = "recipe updated";
+            document.body.appendChild(successAlert);
+            setTimeout(() => {
+            window.location.href = "/admin.html";
+            }, 5000);
+        }
+        else if(response.status===401){
+            const errorAlert = document.createElement("div");
+            errorAlert.classList.add("alert", "alert-danger");
+            errorAlert.innerHTML = "You are not authorized to edit this recipe.";
+            document.body.appendChild(errorAlert);
+            window.location.href = "/login.html";
+            }
+            else if(response.status===400){
+                const errorAlert = document.createElement("div");
+                errorAlert.classList.add("alert", "alert-danger");
+                errorAlert.innerHTML = "recipe failed to update";
+                document.body.appendChild(errorAlert);
+            }
+        else {
+            const errorAlert = document.createElement("div");
+            errorAlert.classList.add("alert", "alert-danger");
+            errorAlert.innerHTML = "Something went wrong.";
+            document.body.appendChild(errorAlert);
+        }
+           
+      }
+      )
+         
+
+      
+   
+
+        }
+    
+      },
+      mounted() {
+        this.getRecipes()
+      },
+
+    })
+    app.mount("#app")
+  </script>
+</html>
