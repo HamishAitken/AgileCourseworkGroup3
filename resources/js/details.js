@@ -20,18 +20,17 @@ createApp({
           }
         })
     },
+    addToShoppingCart(e) {
+      // Get the Text of the <p> Element of the List where the button was clicked.
+      // TODO: save ingredient IDs instead of ingredient names. Use the IDs in the cart to group and add links to similar ingredients.
+      const text = e.target.value
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      if (cart === null) cart = []
+      cart.push(text)
+      localStorage.setItem('cart', JSON.stringify(cart))
+    },
   },
   created() {
     this.fetchData()
   },
 }).mount('#app')
-
-function addToShoppingCart(element) {
-  // Get the Text of the <p> Element of the List where the button was clicked.
-  // TODO: save ingredient IDs instead of ingredient names. Use the IDs in the cart to group and add links to similar ingredients.
-  const text = element.previousElementSibling.innerText
-  let cart = JSON.parse(localStorage.getItem('cart'))
-  if (cart === null) cart = []
-  cart.push(text)
-  localStorage.setItem('cart', JSON.stringify(cart))
-}

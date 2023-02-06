@@ -115,7 +115,6 @@
                 placeholder="Search for ingredients... (e.g rice,onions)"
                 aria-label="Search for ingredients"
               />
-              <!-- TODO: click handler?-->
               <button class="btn button-search-bar" type="button" id="button-addon2" @click="search_ingredients">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -147,10 +146,15 @@
                         alt="Baking goods"
                         height="35px"
                       />
-                      <b>ingredients</b>
+                      <b>No category</b>
                     </h5>
                     <div class="d-flex flex-wrap" id="bakingGoods">
-                      <p class="element-flex ing_id" v-for="ingredient in ingredients" :id="ingredient.id">
+                      <p
+                        class="element-flex ing_id"
+                        v-for="ingredient in ingredients"
+                        :id="'ingredient_'+ingredient.id"
+                        @click="toggleIngredient"
+                      >
                         {{ingredient.name}}
                       </p>
                     </div>
@@ -193,7 +197,7 @@
             <p class="intro-inline text-center mt-1 d-none d-sm-block">Recipes</p>
             <div class="d-flex flex-row top-bar justify-content-between">
               <div class="align-self-start" style="margin-top: -55px">
-                <img src="resources/img/Logo.png" class="px-2 logoTop" alt="Logo" style="width:175px;height:100%;" />
+                <img src="resources/img/Logo.png" class="px-2 logoTop" alt="Logo" style="width: 175px; height: 100%" />
               </div>
               <div class="input-group px-2 main-font searchBarTop mx-0 w-50 d-none d-sm-flex">
                 <input
@@ -208,7 +212,7 @@
                   Search
                 </button>
               </div>
-              <div class="align-items-end mx-2-sm mx-2">
+              <div class="align-items-end mx-2-sm mx-2" id="social_links">
                 <a href="https://thelittlegreenlarder.com/pages/about-us" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -254,8 +258,8 @@
                 </a>
               </div>
             </div>
-            <div class="container ">
-              <div class="input-group px-4 main-font searchBarTop d-sm-none ">
+            <div class="container">
+              <div class="input-group px-4 main-font searchBarTop d-sm-none">
                 <input
                   @keyup.enter="search_recipes"
                   type="search"
@@ -270,29 +274,24 @@
               </div>
             </div>
           </div>
-<!--formating this-->
-<div class="row mt-5">
-  <div v-for="recipe in recipes" class="col-sm-6">
-    <a :href="'/details_page.html?id='+recipe.id">
-      <div class="card mb-4" style="border-radius: 7px">
-        <div class="card-body shadow">
-          <h5 class="card-title text-cente color-text-brownish">{{recipe.name}}</h5>
-          <img
-            id="image"
-            :src="recipe.image"
-            :alt="recipe.name"
-            class="card-img-top"
-            style="border-radius: 10px; height: 200px; object-fit: cover; object-position: center"
-          />
-        </div>
-      </div>
-    </a>
-  </div>
-</div>
-
-
-
-
+          <div class="row mt-5">
+            <div v-for="recipe in recipes" class="col-sm-6">
+              <a :href="'/details_page.html?id='+recipe.id">
+                <div class="card mb-4" style="border-radius: 7px">
+                  <div class="card-body shadow">
+                    <h5 class="card-title text-cente color-text-brownish">{{recipe.name}}</h5>
+                    <img
+                      id="image"
+                      :src="recipe.image"
+                      :alt="recipe.name"
+                      class="card-img-top"
+                      style="border-radius: 10px; height: 200px; object-fit: cover; object-position: center"
+                    />
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <a

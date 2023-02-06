@@ -5,6 +5,7 @@ window.onload = function () {
       return {
         recipes: [],
         ingredients: [],
+        chosenIngredients: [],
       }
     },
     methods: {
@@ -65,6 +66,45 @@ window.onload = function () {
               this.ingredients = data
             }
           })
+      },
+      toggleIngredient(e) {
+        const search_id = parseInt(e.target.id.split('_')[1])
+        var found = false
+        this.chosenIngredients = this.chosenIngredients.filter((id) => {
+          if (search_id == id) {
+            found = true
+            return false
+          } else {
+            return true
+          }
+        })
+
+        if (!found) {
+          this.chosenIngredients.push(search_id)
+          e.target.style.backgroundColor = 'green'
+        } else {
+          e.target.style.backgroundColor = null
+        }
+
+        if (this.chosenIngredients.length === 0) {
+          this.fetch_recipes()
+        } else {
+          fetch('/api/recipes/search_by_ingredients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ search_value: this.chosenIngredients }),
+          })
+            .then((res) => res.json().then((response) => [res.status, response]))
+            .then(([status_code, data]) => {
+              if (status_code === 200) {
+                this.recipes = data
+              } else {
+                // TODO: better error message when no recipes are found
+                this.recipes = []
+                console.log('not found')
+              }
+            })
+        }
       },
     },
     created() {
