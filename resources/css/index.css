@@ -184,6 +184,7 @@ body {
 
   .searchBarTop {
     margin-top: 40px;
+  
   }
 
   /* TODO: check whether this tag should be in @media. It might have been accidentally moved here during a merge. */
@@ -202,3 +203,17 @@ a {
   background-color: initial;
   border: none;
 }
+
+
+
+.search{
+  z-index: 10;
+  position: relative;
+
+bottom: 25px!important;
+}
+
+
+
+
+
