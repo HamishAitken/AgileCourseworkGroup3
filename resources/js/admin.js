@@ -33,7 +33,7 @@ createApp({
       fetch(`/api/recipes/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + token,
+          "Authorization": "Bearer " + token,
         },
       })
         .then((res) => res.json())
@@ -54,7 +54,7 @@ createApp({
       fetch(`/api/recipes/${id}`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + token,
+          "Authorization": "Bearer " + token,
         },
       })
         .then((res) => res.json())

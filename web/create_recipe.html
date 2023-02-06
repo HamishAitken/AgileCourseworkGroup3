@@ -96,13 +96,10 @@
         })
           .then((res) => res.json().then((response) => [res.status, response]))
           .then(([status_code, response]) => {
-            if (status_code === 200) {
+            if (status_code === 201) {
               alert('recipe created successfully')
               window.location.href = '/admin.html'
-            } else {
-              alert('invalid credentials')
-              window.location.href = '/login.html'
-            }
+            } 
           })
       })
     </script>
